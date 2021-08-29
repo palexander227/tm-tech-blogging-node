@@ -13,19 +13,19 @@ import {
 // Get posts
 export const getPosts = () => async (dispatch) => {
   try {
-    const res = await axios.get('/api/posts');
+    const res = await axios.get('/api/post');
 
     dispatch({
       type: GET_POSTS,
-      payload: res.data.data,
+      payload: res.data.posts,
     });
   } catch (err) {
-    dispatch(setAlert(err.response.data.message, 'danger'));
+    /*dispatch(setAlert(err.response.data.message, 'danger'));
 
     dispatch({
       type: POST_ERROR,
       payload: {msg: err.response.statusText, status: err.response.status},
-    });
+    });*/
   }
 };
 
@@ -69,15 +69,10 @@ export const getTagPosts = (tagName) => async (dispatch) => {
 
 // Add post
 export const addPost = (formData) => async (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
 
   try {
-    const res = await axios.post('/api/posts', formData, config);
-
+    const res = await axios.post('/api/post', formData);
+    console.log(res)
     dispatch({
       type: ADD_POST,
       payload: res.data.data,

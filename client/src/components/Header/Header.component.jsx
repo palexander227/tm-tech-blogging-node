@@ -6,31 +6,46 @@ import {logout} from '../../redux/auth/auth.actions';
 import {ReactComponent as Search} from '../../assets/Search.svg';
 import Spinner from '../Spinner/Spinner.component';
 import LinkButton from '../LinkButton/LinkButton.component';
+import { Dropdown  } from 'react-bootstrap';
 
 import './Header.styles.scss';
 
 const Header = ({auth: {isAuthenticated, loading, user}, logout}) => {
   let history = useHistory();
-
+  const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+    <p 
+      data-letters={(user.firstName.charAt(1)+user.lastName.charAt(1)).toUpperCase()}
+      ref={ref}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(e);
+      }}
+    >
+      {children}
+    </p>
+  ));
   const authLinks = (
     <div className='btns'>
       {loading || user === null ? (
         <Spinner width='50px' height='50px' />
       ) : (
-        <Link to={`/users/${user.id}`} title={user.username}>
-          <img
-            alt='user-logo'
-            className='logo'
-            src={`https://secure.gravatar.com/avatar/${user.id}?s=164&d=identicon`}
-          />
-        </Link>
+          <Dropdown>
+            <Dropdown.Toggle as={CustomToggle} id="dropdown-basic">
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">
+                <p data-letters={(user.firstName.charAt(1)+user.lastName.charAt(1)).toUpperCase()}>
+                  {user.username}
+                </p>
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item href={"/add/post"}>Create Post</Dropdown.Item>
+              <Dropdown.Item href={"/users/"+user.id}>My Profile</Dropdown.Item>
+              <Dropdown.Item href="javascript:void(0)" onClick={logout}>Sign out</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
       )}
-      <LinkButton
-        text={'Log out'}
-        link={'/login'}
-        type={'s-btn__filled'}
-        handleClick={logout}
-      />
     </div>
   );
 

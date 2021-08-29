@@ -26,13 +26,10 @@
         overflow: hidden;
 
         .avatar-card {
-          box-shadow: inset 0 10em 0 #3d3d3d !important;
           text-align: center;
           padding: 12px !important;
           margin-bottom: 16px;
-          border: 1px solid #4a4e51 !important;
           border-radius: 3px;
-          background-color: #2d2d2d;
 
           .avatar {
             width: 164px;
@@ -338,4 +335,11 @@
       }
     }
   }
+}
+
+.profile-img::before {
+  width: 8em !important;
+  height: 8em !important;
+  line-height: 8em !important;
+  margin-right: 0 !important;
 }

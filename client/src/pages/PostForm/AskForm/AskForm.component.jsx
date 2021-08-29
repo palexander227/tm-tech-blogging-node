@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useRef} from 'react';
+import React, {Fragment} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {addPost} from '../../../redux/posts/posts.actions';
@@ -12,7 +12,7 @@ import {
 import * as Yup from 'yup';
 import './AskForm.styles.scss';
 
-const AskForm = ({addPost}) => {
+const AskForm = ({auth: { user }, addPost}) => {
   const initialValues = { title: '', content: '', image: ''};
   const validationSchema = Yup.object().shape({
     title: Yup.string()
@@ -22,20 +22,24 @@ const AskForm = ({addPost}) => {
     image: Yup.string()
   })
 
-  const richTextEditorRef = useRef(null);
-
   return (
     <Fragment>
       <Formik
         initialValues={initialValues}
         onSubmit={(values, actions) => {
-          addPost(values);
+          const formData = new FormData();
+          formData.append('postImage', values.postImage);
+          formData.append('title', values.title);
+          formData.append('content', values.content);
+          formData.append('userId', user.id);
+          addPost(formData);
           actions.setSubmitting(false);
         }}
         validationSchema={validationSchema}
       >
-      {({ errors, touched }) => (
+      {({ errors, touched, setFieldValue }) => (
         <Form>
+          {errors.content}
           <div className='question-form p16 s-card'>
             <div className='question-layout'>
               <div className='title-grid'>
@@ -58,7 +62,15 @@ const AskForm = ({addPost}) => {
                 <label className='form-label s-label'>
                   <span className="field-title">Image</span>
                 </label>
-                <Field type="file" class="form-control image-field" id="customFile" name="image" />
+                <input 
+                  type="file"
+                  class="form-control image-field"
+                  id="postImage"
+                  name="postImage"
+                  onChange={(event) => {
+                    setFieldValue("postImage", event.currentTarget.files[0]);
+                  }}
+                />
               </div>
               <div className='body-grid'>
                 <label className='form-label s-label fc-black-800'>
@@ -69,21 +81,31 @@ const AskForm = ({addPost}) => {
                   </p>
                 </label>
                 <div className='s-textarea rich-text-editor-container'>
-                  <RichTextEditor
-                    ref={richTextEditorRef}
-                    className="form-control"
-                  />
+                <Field
+                    component={RichTextEditor}
+                    name="content"
+                    type="content"
+                    render={({ field, form }) => (
+                      <RichTextEditor
+                        {...field}
+                        handleChange={data => {
+                          form.setFieldValue('content', data)
+                        }}
+                      />
+                    )}
+                />
                 </div>
               </div>
             </div>
           </div>
           <div className='post-button mt-4'>
             <button
-              className='s-btn s-btn__primary'
+              className='btn btn-primary w-25'
               id='submit-button'
               name='submit-button'
+              type='submit'
             >
-              Post your blog
+              Post
             </button>
           </div>
         </Form>
@@ -97,4 +119,8 @@ AskForm.propTypes = {
   addPost: PropTypes.func.isRequired,
 };
 
-export default connect(null, {addPost})(AskForm);
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, {addPost})(AskForm);

@@ -7,7 +7,7 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT,
+  LOGOUT
 } from './auth.types';
 
 // Load User
@@ -16,7 +16,7 @@ export const loadUser = () => async (dispatch) => {
     const res = await axios.get('/api/user');
     dispatch({
       type: USER_LOADED,
-      payload: res.data.users,
+      payload: res.data.users[0],
     });
   } catch (err) {
     dispatch({
@@ -35,7 +35,7 @@ export const register = ({firstName, lastName, username, password}) => async (di
 
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: res.data.message,
+      payload: res.data,
     });
 
     dispatch(setAlert(res.data.message, 'success'));

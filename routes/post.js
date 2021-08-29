@@ -36,11 +36,11 @@ router.post('/', async (req, res) => {
         let fileName = '';
         
         if(files){
-            console
             files.upload({
                 maxBytes: 10000000, 
                 dirname: path.join(__dirname, '..', 'upload'),
             }, async (err, uploadedImg) => {
+                console.log(uploadedImg)
                 if (err) return res.status(400).send({ err });
                 let splitList = uploadedImg[0].fd.split('\\');
                 fileName = splitList[splitList.length - 1];

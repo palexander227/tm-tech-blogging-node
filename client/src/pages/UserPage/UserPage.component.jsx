@@ -1,19 +1,36 @@
-import React, {useEffect, Fragment} from 'react';
+import React, {useEffect, Fragment, useState} from 'react';
 import moment from 'moment';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {getUser} from '../../redux/users/users.actions';
+import {getUser, updateUser, deleteUser} from '../../redux/users/users.actions';
 import {Link} from 'react-router-dom';
-
-import {ReactComponent as Logo} from '../../assets/LogoGlyphMd.svg';
-
+import {
+  Formik,
+  Form,
+  Field,
+  ErrorMessage
+} from 'formik';
+import * as Yup from 'yup';
+import { Modal, Button } from 'react-bootstrap';
 import PageTitle from '../../components/PageTitle/PageTitle.component';
 import Spinner from '../../components/Spinner/Spinner.component';
-import TagBadge from '../../components/TagBadge/TagBadge.component';
-
 import './UserPage.styles.scss';
 
-const UserPage = ({getUser, user: {user, loading}, match}) => {
+const UserPage = ({getUser, updateUser, deleteUser, user: {user, loading}, match}) => {
+  const [isUpdate, setUpdate] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const initialValues = { firstName: user?.firstName, lastName: user?.lastName, username: user?.username};
+  const validationSchema= Yup.object().shape({
+      firstName: Yup.string()
+        .required("First Name is required"),
+      lastName: Yup.string()
+        .required("Last Name is required")
+    
+  })
+
   useEffect(() => {
     getUser(match.params.id);
     // eslint-disable-next-line
@@ -26,41 +43,20 @@ const UserPage = ({getUser, user: {user, loading}, match}) => {
       <PageTitle title={`User ${user.username} - CLONE Stack Overflow`} />
       <div id='mainbar' className='user-main-bar pl24 pt24'>
         <div className='user-card'>
-          <div className='grid--cell s-navigation mb16'>
-            <Link
-              to='#'
-              className='s-navigation--item is-selected'
-              data-shortcut='P'
-            >
-              Profile
-            </Link>
-            <Link to='#' className='s-navigation--item' data-shortcut='A'>
-              Activity
-            </Link>
-          </div>
           <div className='grid'>
             <div className='img-card'>
               <div className='avatar-card'>
                 <div className='avatar'>
                   <Link className='avatar-link' to={`/users/${user.id}`}>
                     <div className='logo-wrapper'>
-                      <img
-                        src={`https://secure.gravatar.com/avatar/${user.id}?s=164&d=identicon`}
-                        alt='user-logo'
-                      />
+                    <p data-letters={(user.firstName.charAt(1)+user.lastName.charAt(1)).toUpperCase()} className="profile-img">
+                    </p>
                     </div>
                   </Link>
                 </div>
-                <div className='title'>
-                  <div className='grid fc-black-800'>
-                    {user.views}
-                    &nbsp;
-                    <span className='fc-light'>PROFILE VIEWS</span>
-                  </div>
-                </div>
               </div>
             </div>
-            <div className='content-card'>
+            <div className='content-card py-4'>
               <div className='content-grid'>
                 <div className='info-cell'>
                   <div className='info'>
@@ -83,7 +79,7 @@ const UserPage = ({getUser, user: {user, loading}, match}) => {
                           <div className='head fc-black-700'>
                             {user.answer_count}
                           </div>
-                          <div className='foot fc-black-500'>answers</div>
+                          <button className='btn btn-primary foot fc-black-500' onClick={()=>setUpdate(true)} disabled={isUpdate}>upodate</button>
                         </div>
                       </div>
                       <div className='cells'>
@@ -91,23 +87,7 @@ const UserPage = ({getUser, user: {user, loading}, match}) => {
                           <div className='head fc-black-700'>
                             {user.post_count}
                           </div>
-                          <div className='foot fc-black-500'>questions</div>
-                        </div>
-                      </div>
-                      <div className='cells'>
-                        <div className='column-grid'>
-                          <div className='head fc-black-700'>
-                            {user.comment_count}
-                          </div>
-                          <div className='foot fc-black-500'>comments</div>
-                        </div>
-                      </div>
-                      <div className='cells'>
-                        <div className='column-grid'>
-                          <div className='head fc-black-700'>
-                            {user.tag_count}
-                          </div>
-                          <div className='foot fc-black-500'>tags</div>
+                          <button className='btn btn-danger foot fc-black-500' onClick={handleShow}>delete</button>
                         </div>
                       </div>
                     </div>
@@ -119,133 +99,112 @@ const UserPage = ({getUser, user: {user, loading}, match}) => {
         </div>
         <div className='row-grid'>
           <div className='grid-cell1'>
-            <div className='cell-layout'>
-              <div className='community'>
-                <h3 className='bc-black-3'>
-                  <span className='icon'>
-                    <svg
-                      aria-hidden='true'
-                      className='svg-icon native icon-logo-sex'
-                      width='18'
-                      height='18'
-                      viewBox='0 0 18 18'
-                    >
-                      <path
-                        d='M3 4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2H3z'
-                        fill='#8FD8F7'
-                      />
-                      <path
-                        d='M15 11H3c0 1.1.9 2 2 2h5v3l3-3a2 2 0 0 0 2-2z'
-                        fill='#155397'
-                      />
-                      <path fill='#46A2D9' d='M3 5h12v2H3z' />
-                      <path fill='#2D6DB5' d='M3 8h12v2H3z' />
-                    </svg>
-                  </span>
-                  <span className='text fw-bold fc-dark bc-black-3'>
-                    Communities
-                  </span>
-                </h3>
-                <ul>
-                  <li className='item'>
-                    <Link to='/'>
-                      <span>
-                        <Logo className='logo' />
-                      </span>
-                      <span className='fc-blue-600 fs-body2'>
-                        Stack Overflow
-                      </span>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div className='user-posts'>
-                <h3 className='fw-bold fc-dark bc-black-3'>
-                  Top network posts
-                </h3>
-                <p className='fc-light'>
-                  We respect a laser-like focus on one topic.
-                </p>
-              </div>
-            </div>
           </div>
           <div className='grid-cell2'>
             <div className='top-tags'>
-              <h3 className='fw-bold fc-dark bc-black-3'>Top Tags</h3>
-              <div className='top-tags-sec'>
-                <div className='top-tags-cells'>
-                  <div className='top-cell'>
-                    <div className='tag-cell bg-black-025'>
-                      <TagBadge
-                        tag_name={'java'}
-                        size={'s-tag s-tag__lg'}
-                        float={'left'}
-                      />
-                      <div className='score'>
-                        <div className='score-txt'>
-                          <div className='score-tab'>
-                            <span className='txt fc-light'>Posts</span>
-                            <span className='number fc-black-800'>2</span>
-                          </div>
-                        </div>
+              <Formik
+                initialValues={initialValues}
+                onSubmit={(values, actions) => {
+                  updateUser(values);
+                  setUpdate(false);
+                  actions.setSubmitting(false);
+                }}
+                validationSchema={validationSchema}
+              >
+              {({ errors, touched }) => (
+                <Form className='login-form'>
+                  <div className='form-group mb-3'>
+                    <label htmlFor='username' className='pb-2 font-weight-bold' >
+                      Username
+                    </label>
+                    <Field
+                      className={'form-control'}
+                      type='text'
+                      name='username'
+                      id='username'
+                      disabled={true}
+                    />
+                  </div>
+                  <div className='form-group mb-3'>
+                  <label htmlFor='firstName' className='pb-2 font-weight-bold'>
+                      Firstname
+                    </label>
+                    <Field
+                      className={'form-control ' + (errors.firstName && touched.firstName ? 'invalid' : '')}
+                      type='text'
+                      name='firstName'
+                      id='firstName'
+                      disabled={!isUpdate}
+                    />
+                    <ErrorMessage name="firstName" className="formik-err-msg" component="div"/>
+                  </div>
+                  <div className='form-group mb-3'>
+                  <label htmlFor='lastName' className='pb-2 font-weight-bold'>
+                      Lastname
+                    </label>
+                    <Field
+                      className={'form-control ' + (errors.lastName && touched.lastName ? 'invalid' : '')}
+                      type='text'
+                      name='lastName'
+                      id='lastName'
+                      disabled={!isUpdate}
+                    />
+                    <ErrorMessage name="lastName" className="formik-err-msg" component="div"/>
+                  </div>
+                  {isUpdate &&
+                    <div className="d-flex">
+                      <div className='grid gs4 gsy fd-column js-auth-item '>
+                        <button
+                          className='btn btn-primary'
+                          id='submit-button'
+                          name='submit-button'
+                          type='submit'
+                        >
+                          Update
+                        </button>
+                      </div>
+                      <div className='grid gs4 gsy fd-column js-auth-item '>
+                        <button
+                          className='btn btn-danger'
+                          id='cancel-button'
+                          name='cancel-button'
+                        >
+                          Cancel
+                        </button>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className='top-tags-cells'>
-                  <div className='top-cell'>
-                    <div className='tag-cell bg-black-025'>
-                      <TagBadge
-                        tag_name={'node.js'}
-                        size={'s-tag s-tag__md'}
-                        float={'left'}
-                      />
-                      <div className='score'>
-                        <div className='score-txt'>
-                          <div className='score-tab'>
-                            <span className='txt fc-light'>Posts</span>
-                            <span className='number fc-black-800'>1</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className='top-tags-cells'>
-                  <div className='top-cell'>
-                    <div className='tag-cell bg-black-025'>
-                      <TagBadge
-                        tag_name={'react'}
-                        size={'s-tag s-tag__md'}
-                        float={'left'}
-                      />
-                      <div className='score'>
-                        <div className='score-txt'>
-                          <div className='score-tab'>
-                            <span className='txt fc-light'>Posts</span>
-                            <span className='number fc-black-800'>0</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  }
+                </Form>
+              )}
+              </Formik>
             </div>
           </div>
         </div>
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Body>Are you sure you want to delete your account</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            No
+          </Button>
+          <Button variant="primary" onClick={()=> { deleteUser(); handleClose();}}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Fragment>
   );
 };
 
 UserPage.propTypes = {
   getUser: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  user: state.user,
+  user: state.user
 });
 
-export default connect(mapStateToProps, {getUser})(UserPage);
+export default connect(mapStateToProps, {getUser, updateUser, deleteUser})(UserPage);

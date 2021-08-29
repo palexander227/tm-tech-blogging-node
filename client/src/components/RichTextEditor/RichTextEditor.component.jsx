@@ -19,6 +19,7 @@ const MyStatefulEditor = (props) => {
       } }
       onChange={ ( event, editor ) => {
         const data = editor.getData();
+        props.handleChange(data);
         console.log( { event, editor, data } );
       } }
       onBlur={ ( event, editor ) => {
