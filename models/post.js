@@ -9,6 +9,9 @@ const Post = db.define('Post', {
     content: {
         type: Sequelize.STRING
     },
+    image:{
+        type : Sequelize.TEXT
+    }
 });
 
 Post.belongsTo(User, { as: 'user' })

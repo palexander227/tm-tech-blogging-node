@@ -26,13 +26,44 @@ router.get('/:postid/comments', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const post = await Post.create({
-            title: req.body.title,
-            content: req.body.content,
-            userId: req.user.id
-        });
 
-        res.status(201).send({ message: 'Post created', post });
+        let files = undefined;
+        if (req._fileparser) {
+            files = req._fileparser.upstreams.length
+                ? req.file("postImage")
+                : undefined;
+        }
+        let fileName = '';
+        
+        if(files){
+            console
+            files.upload({
+                maxBytes: 10000000, 
+                dirname: path.join(__dirname, '..', 'upload'),
+            }, async (err, uploadedImg) => {
+                if (err) return res.status(400).send({ err });
+                let splitList = uploadedImg[0].fd.split('\\');
+                fileName = splitList[splitList.length - 1];
+                const post = await Post.create({
+                    title: req.body.title,
+                    content: req.body.content,
+                    userId: req.user.id,
+                    image:fileName
+                });
+                res.status(201).send({ message: 'Post created', post });
+                //res.status(200).send({message: 'uploaded successfully...', data: {url: uploadedImg[0].fd}});
+            })
+        }else{
+            const post = await Post.create({
+                title: req.body.title,
+                content: req.body.content,
+                userId: req.user.id,
+                image:fileName
+            });
+            res.status(201).send({ message: 'Post created', post });
+        }
+
+        
     }
     catch (err) {
         if (err.name === 'SequelizeForeignKeyConstraintError')
@@ -94,6 +125,9 @@ router.post('/file_upload', function(req, res) {
         dirname: path.join(__dirname, '..', 'upload'),
     }, async (err, uploadedImg) => {
         if (err) return res.status(400).send({ err });
+        console.log(uploadedImg[0].fd);
+        let splitList = uploadedImg[0].fd;
+        let lastElement = splitList[splitList.length - 1];
         res.status(200).send({message: 'uploaded successfully...', data: {url: uploadedImg[0].fd}});
     })
 }, (error, req, res, next) => {
