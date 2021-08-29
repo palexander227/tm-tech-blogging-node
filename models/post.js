@@ -7,7 +7,7 @@ const Post = db.define('Post', {
         type: Sequelize.STRING
     },
     content: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
     },
     image:{
         type : Sequelize.TEXT

@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router()
 const Comment = require('../models/comment');
+const User = require('../models/user');
 
-router.get('/', async (req, res) => {
+router.get('/:postid', async (req, res) => {
+    const { postid } = req.params;
     try {
-        const comments = await Comment.findAll({ where: { userId: req.user.id } });
+        const comments = await Comment.findAll({ where: { postid: postid }, include: [{model: User, as: 'user'}] });
         res.status(200).send({ message: '', comments })
     }
     catch (err) {
@@ -20,7 +22,8 @@ router.post('/', async (req, res) => {
             userId: req.user.id
         });
 
-        res.status(201).send({ message: 'Comment created', comment });
+        const comments = await Comment.findByPk(comment.id, {include: [{model: User, as: 'user'}] });
+        res.status(201).send({ message: 'Comment created', comment: comments });
     }
     catch (err) {
         if (err.name === 'SequelizeForeignKeyConstraintError')

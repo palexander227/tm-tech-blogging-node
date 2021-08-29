@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {login, register} from '../../redux/auth/auth.actions';
+import {enableSignupLink} from '../../redux/auth/auth.actions';
 import {
   Formik,
   Form,
@@ -12,7 +13,7 @@ import {
 import * as Yup from 'yup';
 import './AuthForm.styles.scss';
 
-const AuthForm = ({register, login, action}) => {
+const AuthForm = ({register, login, action, enableSignupLink}) => {
   let initialValues = { username: '', password: ''};
   if (action === 'Sign up') initialValues = {...initialValues, firstName: '', lastName: ''};
   const signUpValidationSchema = {
@@ -33,7 +34,7 @@ const AuthForm = ({register, login, action}) => {
   const logInLink = (
     <Fragment>
       Don't have an account?{' '}
-      <Link to='/register' name='register'>
+      <Link to='/register' name='register' onClick={()=>enableSignupLink(false)}>
         Sign up
       </Link>
     </Fragment>
@@ -171,6 +172,7 @@ const AuthForm = ({register, login, action}) => {
 AuthForm.propTypes = {
   register: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
+  enableSignupLink: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
 };
 
@@ -178,4 +180,4 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, {login, register})(AuthForm);
+export default connect(mapStateToProps, {login, register, enableSignupLink})(AuthForm);

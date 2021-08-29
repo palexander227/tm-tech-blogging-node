@@ -106,3 +106,21 @@
     width: 80%;
   }
 }
+
+.created-date {
+  color: #757575;
+}
+
+.profile-25 {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 25px;
+}
+
+iframe {
+  display: block;       /* iframes are inline by default */
+  border: none;         /* Reset default border */
+  height: 100%;        /* Viewport-relative units */
+  width: 100%;
+}

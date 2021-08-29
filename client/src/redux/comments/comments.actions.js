@@ -10,11 +10,11 @@ import {setAlert} from '../alert/alert.actions';
 
 export const getComments = (id) => async (dispatch) => {
   try {
-    const res = await axios.get(`/api/posts/comments/${id}`);
+    const res = await axios.get(`/api/comments/${id}`);
 
     dispatch({
       type: GET_COMMENTS,
-      payload: res.data.data,
+      payload: res.data.comments,
     });
   } catch (err) {
     dispatch({
@@ -25,28 +25,22 @@ export const getComments = (id) => async (dispatch) => {
 };
 
 // Add COMMENT
-export const addComment = (postId, formData) => async (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+export const addComment = (formData) => async (dispatch) => {
 
   try {
     const res = await axios.post(
-      `/api/posts/comments/${postId}`,
-      formData,
-      config
+      `/api/comments`,
+      formData
     );
 
     dispatch({
       type: ADD_COMMENT,
-      payload: res.data.data,
+      payload: res.data.comment,
     });
 
     dispatch(setAlert(res.data.message, 'success'));
 
-    dispatch(getComments(postId));
+    dispatch(getComments(formData.postId));
   } catch (err) {
     dispatch(setAlert(err.response.data.message, 'danger'));
 
@@ -60,7 +54,7 @@ export const addComment = (postId, formData) => async (dispatch) => {
 // Delete Comment
 export const deleteComment = (CommentId) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/posts/comments/${CommentId}`);
+    const res = await axios.delete(`/api/comments/${CommentId}`);
 
     dispatch({
       type: DELETE_COMMENT,

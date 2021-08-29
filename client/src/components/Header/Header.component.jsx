@@ -14,7 +14,7 @@ const Header = ({auth: {isAuthenticated, loading, user}, logout}) => {
   let history = useHistory();
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <p 
-      data-letters={(user.firstName.charAt(1)+user.lastName.charAt(1)).toUpperCase()}
+      data-letters={(user.firstName.charAt(0)+user.lastName.charAt(0)).toUpperCase()}
       ref={ref}
       onClick={(e) => {
         e.preventDefault();
@@ -35,7 +35,7 @@ const Header = ({auth: {isAuthenticated, loading, user}, logout}) => {
 
             <Dropdown.Menu>
               <Dropdown.Item href="#/action-1">
-                <p data-letters={(user.firstName.charAt(1)+user.lastName.charAt(1)).toUpperCase()}>
+                <p data-letters={(user.firstName.charAt(0)+user.lastName.charAt(0)).toUpperCase()}>
                   {user.username}
                 </p>
               </Dropdown.Item>

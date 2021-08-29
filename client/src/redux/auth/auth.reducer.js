@@ -5,7 +5,8 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT
+  LOGOUT,
+  ENABLE_SIGNUP_LINK
 } from './auth.types';
 
 const initialState = {
@@ -48,6 +49,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         registered: true
+      }
+    case ENABLE_SIGNUP_LINK:
+      return {
+        ...state,
+        registered: action.payload
       }
     default:
       return state;

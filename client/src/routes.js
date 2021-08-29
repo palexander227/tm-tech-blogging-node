@@ -73,6 +73,8 @@ const Routes = () => {
       <Route exact path='/users/:id' component={UserPageComponent} />
       <Route exact path='/tags/:tagname' component={TagPageComponent} />
       <Route exact path='/add/post' component={PostFormComponent} />
+      <Route exact path='/add/post/:id' component={PostFormComponent} />
+      <Route exact path='/dashboard' component={HomePageComponent} />
       <Route path='*' component={NotFoundComponent} />
     </Switch>
   );

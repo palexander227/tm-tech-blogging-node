@@ -49,8 +49,9 @@ const UserPage = ({getUser, updateUser, deleteUser, user: {user, loading}, match
                 <div className='avatar'>
                   <Link className='avatar-link' to={`/users/${user.id}`}>
                     <div className='logo-wrapper'>
-                    <p data-letters={(user.firstName.charAt(1)+user.lastName.charAt(1)).toUpperCase()} className="profile-img">
-                    </p>
+                      <div className="profile-image-lg">
+                        {user.firstName.charAt(0) + user.lastName.charAt(0)}
+                      </div>
                     </div>
                   </Link>
                 </div>
@@ -66,7 +67,7 @@ const UserPage = ({getUser, updateUser, deleteUser, user: {user, loading}, match
                     <div className='date'>
                       <p>
                         user created &nbsp;-&nbsp;
-                        {moment(user.created_at).fromNow(false)}
+                        {moment(user.createdAt).fromNow(false)}
                       </p>
                     </div>
                   </div>

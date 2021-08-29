@@ -1,17 +1,17 @@
 import React from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import './RichTextEditor.styles.scss';
 
 const MyStatefulEditor = (props) => {
-
   return (
     <CKEditor
-      editor={ BalloonEditor }
-      data="<p></p>"
+      editor={ ClassicEditor }
+      data={props.value}
       config={{ckfinder: {
         // Upload the images to the server using the CKFinder QuickUpload command.
-        uploadUrl: 'http://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json'
+        uploadUrl: '/api/post/file_upload?command=QuickUpload&type=Images&responseType=json',
+        mediaEmbed: {previewsInData: true}
       }}}
       onReady={ editor => {
         // You can store the "editor" and use when it is needed.

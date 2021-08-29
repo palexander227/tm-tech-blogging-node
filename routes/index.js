@@ -7,9 +7,9 @@ require('./../config/passport')(passport);
 // partially protected routes
 router.use('/user', require('./user'))
 
+router.use('/post', require('./post'))
 // protected routes
 router.use(passport.authenticate('jwt', { session: false }))
-router.use('/post', require('./post'))
 router.use('/comments', require('./comment'))
 
 module.exports = router;

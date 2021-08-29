@@ -6,7 +6,6 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import App from './App';
 import axios from 'axios';
-import  { Redirect } from 'react-router-dom'
 
 // For GET requests
 axios.interceptors.request.use(
@@ -35,7 +34,7 @@ axios.interceptors.response.use(
   },
   (err) => {
     if (err.response.status === 401 || err.response.data.message === '401 Unauthorized') {
-      return <Redirect to='/login' />
+      //return <Redirect to='/login' />
     }
     return Promise.reject(err);
   }

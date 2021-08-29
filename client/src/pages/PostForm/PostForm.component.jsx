@@ -1,17 +1,21 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import PropTypes from 'prop-types';
-
+import {getPost} from '../../redux/posts/posts.actions';
 import Spinner from '../../components/Spinner/Spinner.component';
-import AskWidget from './AskWidget/AskWidget.component';
 
 import './PostForm.styles.scss';
 import AskForm from './AskForm/AskForm.component';
 
-const PostForm = ({auth: {isAuthenticated, loading}}) => {
-  if (!isAuthenticated) {
-    //return <Redirect to='/login' />;
+const PostForm = ({auth, auth: {isAuthenticated, loading}, match, getPost}) => {
+
+  useEffect(()=>{
+    getPost(match.params.id);
+  }, [])
+
+  if (!isAuthenticated && !loading) {
+    return <Redirect to='/login' />;
   }
 
   return loading === null ? (
@@ -27,7 +31,7 @@ const PostForm = ({auth: {isAuthenticated, loading}}) => {
           </div>
           <div className='post-form-section'>
             <div className='post-form' style={{width: '100%'}}>
-              <AskForm />
+              <AskForm postId={match.params.id}/>
             </div>
           </div>
         </div>
@@ -38,10 +42,11 @@ const PostForm = ({auth: {isAuthenticated, loading}}) => {
 
 PostForm.propTypes = {
   auth: PropTypes.object.isRequired,
+  getPost: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, null)(PostForm);
+export default connect(mapStateToProps, {getPost})(PostForm);

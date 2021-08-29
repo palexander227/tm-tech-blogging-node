@@ -7,7 +7,8 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT
+  LOGOUT,
+  ENABLE_SIGNUP_LINK
 } from './auth.types';
 
 // Load User
@@ -39,8 +40,6 @@ export const register = ({firstName, lastName, username, password}) => async (di
     });
 
     dispatch(setAlert(res.data.message, 'success'));
-
-    dispatch(loadUser());
   } catch (err) {
     dispatch(setAlert(err.response.data.message, 'danger'));
 
@@ -48,6 +47,14 @@ export const register = ({firstName, lastName, username, password}) => async (di
       type: REGISTER_FAIL,
     });
   }
+};
+
+// Enable signup link
+export const enableSignupLink = (val) => async (dispatch) => {
+  dispatch({
+    type: ENABLE_SIGNUP_LINK,
+    payload: val,
+  });
 };
 
 // Login User
@@ -67,7 +74,7 @@ export const login = ({username, password}) => async (dispatch) => {
 
     dispatch(loadUser());
   } catch (err) {
-    dispatch(setAlert(err.response.data.message, 'danger'));
+    dispatch(setAlert('Username or password is incorrect', 'danger'));
 
     dispatch({
       type: LOGIN_FAIL,

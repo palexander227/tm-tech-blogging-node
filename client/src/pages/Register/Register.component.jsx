@@ -1,20 +1,19 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment} from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {setAlert} from '../../redux/alert/alert.actions';
-
 import AuthForm from '../../components/AuthForm/AuthForm.component';
 
 import './Register.styles.scss';
 
 const Register = ({isAuthenticated, isRegistered}) => {
-  useEffect(()=>{
-    return <Redirect to='/login' /> 
-  }, [isRegistered]);
-
   if (isAuthenticated) {
     return <Redirect to='/' />;
+  }
+
+  if (isRegistered) {
+    return <Redirect to='/login' />;
   }
 
   return (

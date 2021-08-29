@@ -1,7 +1,7 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {addPost} from '../../../redux/posts/posts.actions';
+import {addPost, updatePost} from '../../../redux/posts/posts.actions';
 import RichTextEditor from '../../../components/RichTextEditor/RichTextEditor.component';
 import {
   Formik,
@@ -11,9 +11,11 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import './AskForm.styles.scss';
+import {Redirect} from 'react-router-dom';
 
-const AskForm = ({auth: { user }, addPost}) => {
-  const initialValues = { title: '', content: '', image: ''};
+const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) => {
+  const [toNext, setToNext] = useState(false)
+  const initialValues = { title: post?.title, content: post?.content, image: ''};
   const validationSchema = Yup.object().shape({
     title: Yup.string()
                 .required("Title is required"),
@@ -22,24 +24,28 @@ const AskForm = ({auth: { user }, addPost}) => {
     image: Yup.string()
   })
 
+  if (toNext) {
+    return <Redirect to="/" />
+  }
+
   return (
     <Fragment>
       <Formik
+        enableReinitialize
         initialValues={initialValues}
         onSubmit={(values, actions) => {
           const formData = new FormData();
-          formData.append('postImage', values.postImage);
           formData.append('title', values.title);
           formData.append('content', values.content);
-          formData.append('userId', user.id);
-          addPost(formData);
+          formData.append('postImage', values.postImage);
+          (postId) ? updatePost(formData, postId) : addPost(formData);
           actions.setSubmitting(false);
+          setToNext(true);
         }}
         validationSchema={validationSchema}
       >
-      {({ errors, touched, setFieldValue }) => (
+      {({ errors, touched, setFieldValue, values, handleChange, handleBlur }) => (
         <Form>
-          {errors.content}
           <div className='question-form p16 s-card'>
             <div className='question-layout'>
               <div className='title-grid'>
@@ -64,7 +70,7 @@ const AskForm = ({auth: { user }, addPost}) => {
                 </label>
                 <input 
                   type="file"
-                  class="form-control image-field"
+                  className="form-control image-field"
                   id="postImage"
                   name="postImage"
                   onChange={(event) => {
@@ -117,10 +123,12 @@ const AskForm = ({auth: { user }, addPost}) => {
 
 AskForm.propTypes = {
   addPost: PropTypes.func.isRequired,
+  updatePost: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  post: state.post
 });
 
-export default connect(mapStateToProps, {addPost})(AskForm);
+export default connect(mapStateToProps, {addPost, updatePost})(AskForm);

@@ -1,75 +1,31 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import './PostItem.styles.scss';
 import {Link} from 'react-router-dom';
 
-import htmlSubstring from '../../services/htmlSubstring'
-import injectEllipsis from '../../services/injectEllipsis'
-
-import UserCard from '../UserCard/UserCard.component';
-import TagBadge from '../TagBadge/TagBadge.component';
-
-import './PostItem.styles.scss';
-
 const PostItem = ({
-  post: {
-    id,
-    title,
-    body,
-    tagname,
-    username,
-    user_id,
-    answer_count,
-    comment_count,
-    views,
-    created_at,
-  },
+  post,
 }) => {
-  const answerVoteUp = (
-    <div className='vote answer'>
-      <span className='vote-count fc-green-500'>{answer_count}</span>
-      <div className='count-text'>answers</div>
-    </div>
-  );
-
-  const answerVoteDown = (
-    <div className='vote'>
-      <span className='vote-count'>{answer_count}</span>
-      <div className='count-text'>answers</div>
-    </div>
-  );
-
+  const {id, title, content, createdAt, user: {firstName, lastName}, image} = post;
   return (
     <div className='posts'>
-      <div className='stats-container fc-black-500'>
-        <div className='stats'>
-          <div className='vote'>
-            <span className='vote-count'>{comment_count}</span>
-            <div className='count-text'>comments</div>
-          </div>
-          {answer_count > 0 ? answerVoteUp : answerVoteDown}
-          <div className='vote'>
-            <span className='vote-count'>{tagname ? 1 : 0}</span>
-            <div className='count-text'>tags</div>
-          </div>
-          <div className='vote'>
-            <div className='count-text'>{views} views</div>
-          </div>
+      <div className="row">
+        <div className="profile-image">
+            {firstName.charAt(0) + lastName.charAt(0)}
         </div>
+        <div className="user-info ml-2 my-auto">{firstName} {lastName}</div>
       </div>
-      <div className='summary'>
-        <h3>
-          <Link to={`/questions/${id}`}>{title}</Link>
-        </h3>
-        {/*<div className='brief' dangerouslySetInnerHTML={{__html: injectEllipsis(htmlSubstring(body, 200))}}></div>*/}
-        <TagBadge tag_name={tagname} size={'s-tag'} float={'left'} />
-        <UserCard
-          created_at={created_at}
-          user_id={user_id}
-          username={username}
-          float={'right'}
-          backgroundColor={'transparent'}
-        />
+      <div className="row">
+        <div className="col-6">
+          <Link className="title mb-2" to={`post/${id}`}>{title}</Link>
+          <div className="content mb-2">{content?.replace(/<[^>]*>/g, "")}</div>
+          <div className="created-date">{moment(createdAt).fromNow(false)}</div>
+        </div>
+        {image && <div className="col-6">
+          <img src={image} alt="" className="thumnail"/>
+        </div>}
       </div>
     </div>
   );

@@ -8,16 +8,20 @@ import {
   POST_ERROR,
   DELETE_POST,
   ADD_POST,
+  UPDATE_POST
 } from './posts.types';
 
 // Get posts
-export const getPosts = () => async (dispatch) => {
+export const getPosts = (userId = null, page = 1) => async (dispatch, getState) => {
+  const state = getState();
   try {
-    const res = await axios.get('/api/post');
-
+    const res = await axios.get(`/api/post/allpost?pageNo=${page}&userId=${userId}`);
+    if (page) {
+      res.data.posts = state.post.posts.concat(res.data.posts);
+    }
     dispatch({
       type: GET_POSTS,
-      payload: res.data.posts,
+      payload: {posts: res.data.posts, count: res.data.count},
     });
   } catch (err) {
     /*dispatch(setAlert(err.response.data.message, 'danger'));
@@ -32,11 +36,11 @@ export const getPosts = () => async (dispatch) => {
 // Get post
 export const getPost = (id) => async (dispatch) => {
   try {
-    const res = await axios.get(`/api/posts/${id}`);
+    const res = await axios.get(`/api/post/${id}`);
 
     dispatch({
       type: GET_POST,
-      payload: res.data.data,
+      payload: res.data.post,
     });
   } catch (err) {
     dispatch(setAlert(err.response.data.message, 'danger'));
@@ -72,10 +76,9 @@ export const addPost = (formData) => async (dispatch) => {
 
   try {
     const res = await axios.post('/api/post', formData);
-    console.log(res)
     dispatch({
       type: ADD_POST,
-      payload: res.data.data,
+      payload: res.data.post,
     });
 
     dispatch(setAlert(res.data.message, 'success'));
@@ -94,7 +97,7 @@ export const addPost = (formData) => async (dispatch) => {
 // Delete post
 export const deletePost = (id) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/posts/${id}`);
+    const res = await axios.delete(`/api/post/${id}`);
 
     dispatch({
       type: DELETE_POST,
@@ -102,6 +105,29 @@ export const deletePost = (id) => async (dispatch) => {
     });
 
     dispatch(setAlert(res.data.message, 'success'));
+  } catch (err) {
+    dispatch(setAlert(err.response.data.message, 'danger'));
+
+    dispatch({
+      type: POST_ERROR,
+      payload: {msg: err.response.statusText, status: err.response.status},
+    });
+  }
+};
+
+// Update post
+export const updatePost = (formData, postId) => async (dispatch) => {
+
+  try {
+    const res = await axios.put(`/api/post/${postId}`, formData);
+    dispatch({
+      type: UPDATE_POST,
+      payload: res.data.post,
+    });
+
+    dispatch(setAlert(res.data.message, 'success'));
+
+    dispatch(getPosts());
   } catch (err) {
     dispatch(setAlert(err.response.data.message, 'danger'));
 
