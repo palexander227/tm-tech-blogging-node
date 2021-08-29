@@ -134,6 +134,16 @@ router.post('/file_upload', function(req, res) {
     res.status(400).send({ error: error.message });
 });
 
+router.get('/allpost', async (req, res) => {
+    try {
+        const posts = await Post.findAll();
+        res.status(200).send({ message: '', posts })
+    }
+    catch (err) {
+        res.status(500).send({ message: 'Some error occured while fetching posts for logged in user' })
+    }
+})
+
 
 
 module.exports = router
