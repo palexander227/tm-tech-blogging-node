@@ -7,6 +7,7 @@ const passport = require('passport')
 require('../config/passport')(passport)
 const jwt = require('jsonwebtoken');
 
+// Get all users
 router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const users = await User.findAll({ attributes: { exclude: ['password'] } });
@@ -17,6 +18,17 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
     }
 })
 
+// Check user authenticated
+router.get('/auth', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    try {
+        res.status(201).send({ message: '', user: req.user });
+    }
+    catch (err) {
+        res.status(409).send({ message: 'Unable to fetch user records' })
+    }
+})
+
+// Get User by Id
 router.get('/:userid', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { userid } = req.params;
 
@@ -32,7 +44,9 @@ router.get('/:userid', passport.authenticate('jwt', { session: false }), async (
     }
 })
 
+// register user
 router.post('/register', async (req, res) => {
+    console.log(req.body)
     try {
         await User.create({
             firstName: req.body.firstName,
@@ -49,6 +63,7 @@ router.post('/register', async (req, res) => {
     }
 })
 
+// login user
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -76,6 +91,7 @@ router.post('/login', async (req, res) => {
     }
 })
 
+// update user
 router.put('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const user = await User.findByPk(req.user.id, { attributes: { exclude: ['password'] } });
@@ -95,6 +111,7 @@ router.put('/', passport.authenticate('jwt', { session: false }), async (req, re
     }
 })
 
+// delete user
 router.delete('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
         const user = await User.findByPk(req.user.id, { attributes: { exclude: ['password'] } });

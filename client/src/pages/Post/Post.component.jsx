@@ -1,5 +1,4 @@
 import React, {useEffect, Fragment, useState} from 'react';
-import ReactDOM from 'react-dom';
 import moment from 'moment';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -8,7 +7,6 @@ import {getComments, addComment, deleteComment} from '../../redux/comments/comme
 import PageTitle from '../../components/PageTitle/PageTitle.component';
 import Spinner from '../../components/Spinner/Spinner.component';
 import { Dropdown } from 'react-bootstrap';
-import IframeResizer from 'iframe-resizer-react';
 import './Post.styles.scss';
 
 const Post = ({getPost, post, comments, match, getComments, addComment, deleteComment, deletePost, auth: {user}}) => {

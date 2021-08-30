@@ -41,7 +41,7 @@ const HomePage = ({getPosts, post: {posts, loading, count}, match, auth: {user, 
   ) : (
     <Fragment>
       <div id='mainbar' className='homepage fc-black-800'>
-        <div class="row float-right">
+        <div className="row float-right">
           {isUser && <Link className="btn btn-primary" to="add/post">Create New Post</Link>}
         </div>
         <div className='questions'>

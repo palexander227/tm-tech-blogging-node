@@ -5,38 +5,10 @@ const Comment = require('../models/comment');
 const User = require('../models/user');
 const path = require('path');
 const passport = require('passport')
+const Sequelize = require('sequelize');
 require('../config/passport')(passport)
 
-router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    try {
-        const pageLimit = 5;
-        const pageNo = req.query.pageNo?req.query.pageNo:1;
-
-        // Comment.hasMany(Post, {foreignKey: 'postId'})
-
-        const posts = await Post.findAll({ 
-            attributes: ['id','title','content','image','createdAt','updatedAt','userId'],
-            where: { userId: req.user.id },
-            limit: pageLimit,
-            offset:((pageNo - 1) * pageLimit)
-        });
-        res.status(200).send({ message: '', posts })
-    }
-    catch (err) {
-        res.status(500).send({ message: 'Some error occured while fetching posts for logged in user' })
-    }
-})
-
-router.get('/:postid/comments', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    try {
-        const comments = await Comment.findAll({ where: { postId: req.params.postid } });
-        res.status(200).send({ message: '', comments })
-    }
-    catch (err) {
-        res.status(500).send({ message: 'Some error occured while fetching comments by post id' })
-    }
-})
-
+// Add Post
 router.post('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
 
@@ -87,6 +59,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req, r
     }
 })
 
+// Update post
 router.put('/:postid', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { postid } = req.params;
 
@@ -115,6 +88,7 @@ router.put('/:postid', passport.authenticate('jwt', { session: false }), async (
     }
 })
 
+// Delete post
 router.delete('/:postid', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { postid } = req.params;
 
@@ -133,7 +107,7 @@ router.delete('/:postid', passport.authenticate('jwt', { session: false }), asyn
     }
 })
 
-
+// Editor file upload
 router.post('/file_upload', function(req, res) {
     let files = undefined;
     if (req._fileparser) {
@@ -152,20 +126,19 @@ router.post('/file_upload', function(req, res) {
         if (err) return res.status(400).send({ err });
         const mediaPath = `https://thoughtmuseum-image-hosting.s3.us-east-2.amazonaws.com/${uploadedImg[0].fd}`;
         res.send({uploaded: true, url: mediaPath});
-        /*res.status(200).send({"error": {
-                "message": "The image upload failed because the image was too big (max 1.5MB)."
-            }
-        })*/
     })
 }, (error, req, res, next) => {
     res.status(400).send({ error: error.message });
 });
 
+// Get posts
 router.get('/allpost', async (req, res) => {
     try {
         const pageLimit = 10;
         const pageNo = req.query.pageNo?req.query.pageNo:1;
         const userId = req.query.userId?req.query.userId:null;
+        const search = req.query.search;
+        let condition;
         const query = {
             limit: pageLimit,
             offset:((pageNo - 1) * pageLimit),
@@ -177,19 +150,32 @@ router.get('/allpost', async (req, res) => {
                 }
             ]
         };
-        console.log(userId)
         if (userId && userId !== 'null') {
-            query.where = {userId: userId};
+            condition = {userId: userId};
         }
-        console.log(query)
+        if (search) {
+            const searchQuery = {
+                title: {
+                    [Sequelize.Op.like]: '%'+search+'%'
+                }
+            }
+            condition = condition ? {...condition, ...searchQuery} : searchQuery
+            
+        }
+        console.log(condition)
+        if (condition) {
+            query.where = condition;
+        }
         const {count, rows: posts} = await Post.findAndCountAll(query);
         res.status(200).send({ message: '', posts, count })
     }
     catch (err) {
+        console.log(err)
         res.status(500).send({ message: 'Some error occured while fetching posts' })
     }
 })
 
+// Get single post
 router.get('/:postid', async (req, res) => {
     const { postid } = req.params;
     try {
@@ -209,7 +195,5 @@ router.get('/:postid', async (req, res) => {
         res.status(500).send({ message: 'Some error occured while fetching posts' })
     }
 })
-
-
 
 module.exports = router

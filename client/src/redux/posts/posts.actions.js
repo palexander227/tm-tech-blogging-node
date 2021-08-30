@@ -16,7 +16,7 @@ export const getPosts = (userId = null, page = 1) => async (dispatch, getState) 
   const state = getState();
   try {
     const res = await axios.get(`/api/post/allpost?pageNo=${page}&userId=${userId}`);
-    if (page) {
+    if (page && page !== 1) {
       res.data.posts = state.post.posts.concat(res.data.posts);
     }
     dispatch({

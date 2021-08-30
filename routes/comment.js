@@ -3,6 +3,7 @@ const router = express.Router()
 const Comment = require('../models/comment');
 const User = require('../models/user');
 
+// get all comments for the post
 router.get('/:postid', async (req, res) => {
     const { postid } = req.params;
     try {
@@ -14,6 +15,7 @@ router.get('/:postid', async (req, res) => {
     }
 })
 
+// Add comment
 router.post('/', async (req, res) => {
     try {
         const comment = await Comment.create({
@@ -33,6 +35,7 @@ router.post('/', async (req, res) => {
     }
 })
 
+// Update comment
 router.put('/:commentid', async (req, res) => {
     const { commentid } = req.params;
 
@@ -53,6 +56,7 @@ router.put('/:commentid', async (req, res) => {
     }
 })
 
+// Delete comment
 router.delete('/:commentid', async (req, res) => {
     const { commentid } = req.params;
 

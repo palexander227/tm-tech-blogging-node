@@ -65,10 +65,10 @@ const UserPage = ({getUser, updateUser, deleteUser, user: {user, loading}, match
                       <h2>{user.username}</h2>
                     </div>
                     <div className='date'>
-                      <p>
+                      <div>
                         user created &nbsp;-&nbsp;
                         {moment(user.createdAt).fromNow(false)}
-                      </p>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -1,9 +1,9 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {logout} from '../../redux/auth/auth.actions';
-import {ReactComponent as Search} from '../../assets/Search.svg';
+import {getPosts} from '../../redux/posts/posts.actions';
 import Spinner from '../Spinner/Spinner.component';
 import LinkButton from '../LinkButton/LinkButton.component';
 import { Dropdown  } from 'react-bootstrap';
@@ -11,9 +11,12 @@ import { Dropdown  } from 'react-bootstrap';
 import './Header.styles.scss';
 
 const Header = ({auth: {isAuthenticated, loading, user}, logout}) => {
+
+  const [search, setSearch] = useState('');
   let history = useHistory();
+
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-    <p 
+    <div 
       data-letters={(user.firstName.charAt(0)+user.lastName.charAt(0)).toUpperCase()}
       ref={ref}
       onClick={(e) => {
@@ -22,8 +25,9 @@ const Header = ({auth: {isAuthenticated, loading, user}, logout}) => {
       }}
     >
       {children}
-    </p>
+    </div>
   ));
+
   const authLinks = (
     <div className='btns'>
       {loading || user === null ? (
@@ -35,9 +39,9 @@ const Header = ({auth: {isAuthenticated, loading, user}, logout}) => {
 
             <Dropdown.Menu>
               <Dropdown.Item href="#/action-1">
-                <p data-letters={(user.firstName.charAt(0)+user.lastName.charAt(0)).toUpperCase()}>
+                <div data-letters={(user.firstName.charAt(0)+user.lastName.charAt(0)).toUpperCase()}>
                   {user.username}
-                </p>
+                </div>
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item href={"/add/post"}>Create Post</Dropdown.Item>
@@ -56,6 +60,10 @@ const Header = ({auth: {isAuthenticated, loading, user}, logout}) => {
     </div>
   );
 
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+  }
+
   return loading ? (
     ''
   ) : (
@@ -66,13 +74,13 @@ const Header = ({auth: {isAuthenticated, loading, user}, logout}) => {
         </Link>
         <form
           id='search'
-          onSubmit={() => history.push('/questions')}
+          onSubmit={() => history.push({pathname: '/', search: `search=${search}`})}
           className={`grid--cell fl-grow1 searchbar px12 js-searchbar`}
           autoComplete='off'
         >
           <div className="form-group has-search">
             <span className="fa fa-search form-control-feedback"></span>
-            <input type="text" className="form-control" placeholder="Search" />
+            <input type="text" className="form-control" placeholder="Search" onChange={handleChange} />
           </div>
         </form>
         {!loading && (

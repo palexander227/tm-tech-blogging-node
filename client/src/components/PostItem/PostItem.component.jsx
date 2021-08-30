@@ -20,7 +20,7 @@ const PostItem = ({
       <div className="row">
         <div className="col-6">
           <Link className="title mb-2" to={`post/${id}`}>{title}</Link>
-          <div className="content mb-2">{content?.replace(/<[^>]*>/g, "")}</div>
+          <div className="content mb-2">{content?.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, "\n")}</div>
           <div className="created-date">{moment(createdAt).fromNow(false)}</div>
         </div>
         {image && <div className="col-6">

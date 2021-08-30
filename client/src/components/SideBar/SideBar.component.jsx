@@ -11,7 +11,7 @@ const SideBar = () => (
         className='home-link nav_link'
         to='/'
       >
-        <p>Home</p>
+        <div>Home</div>
       </NavLink>
 
       <NavLink
@@ -20,7 +20,7 @@ const SideBar = () => (
         className='home-link nav_link'
         to='/dashboard'
       >
-        <p>Dashboard</p>
+        <div>Dashboard</div>
       </NavLink>
     </div>
   </div>

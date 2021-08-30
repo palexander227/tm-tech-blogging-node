@@ -15,7 +15,7 @@ import {Redirect} from 'react-router-dom';
 
 const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) => {
   const [toNext, setToNext] = useState(false)
-  const initialValues = { title: post?.title, content: post?.content, image: ''};
+  const initialValues = { title: post?.title, content: post?.content, image: post?.image};
   const validationSchema = Yup.object().shape({
     title: Yup.string()
                 .required("Title is required"),
@@ -24,6 +24,9 @@ const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) =>
     image: Yup.string()
   })
 
+  const removeImg = (setFieldValue) => {
+    setFieldValue('image', '');
+  }
   if (toNext) {
     return <Redirect to="/" />
   }
@@ -51,10 +54,10 @@ const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) =>
               <div className='title-grid'>
                 <label className='form-label s-label'>
                   <span className="field-title">Title</span>
-                  <p className='title-desc fw-normal fs-caption'>
+                  <div className='title-desc fw-normal fs-caption'>
                     Be specific and imagine you’re asking a question to another
                     person
-                  </p>
+                  </div>
                 </label>
                 <Field
                   className={'form-control ' + (errors.title && touched.title ? 'invalid' : '')}
@@ -68,7 +71,7 @@ const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) =>
                 <label className='form-label s-label'>
                   <span className="field-title">Image</span>
                 </label>
-                <input 
+                {!values.image &&<input 
                   type="file"
                   className="form-control image-field"
                   id="postImage"
@@ -76,15 +79,21 @@ const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) =>
                   onChange={(event) => {
                     setFieldValue("postImage", event.currentTarget.files[0]);
                   }}
-                />
+                />}
+                {values.image && 
+                  <div class="img-wrap">
+                    <span class="close" onClick={()=>removeImg(setFieldValue)}>&times;</span>
+                    <img src={values.image} alt="" />
+                </div>
+                }
               </div>
               <div className='body-grid'>
                 <label className='form-label s-label fc-black-800'>
                 <span className="field-title">Body</span>
-                  <p className='body-desc fw-normal fs-caption fc-black-800'>
+                  <div className='body-desc fw-normal fs-caption fc-black-800'>
                     Include all the information someone would need to answer your
                     question
-                  </p>
+                  </div>
                 </label>
                 <div className='s-textarea rich-text-editor-container'>
                 <Field
