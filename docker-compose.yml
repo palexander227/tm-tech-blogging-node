@@ -1,0 +1,23 @@
+version: "2"
+services:
+  node:
+    image: "node:8"
+    user: "node"
+    working_dir: /home/node/app
+    ports:
+      - "8082:12000"
+    environment:
+      - NODE_ENV=production
+      - BUCKET_KEY=AKIA6E7ITVVH7U5QWD6R
+      - BUCKET_NAME=thoughtmuseum-image-hosting
+      - BUCKET_SECRET=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
+      - DB_DIALECT=mysql
+      - DB_HOST=us-cdbr-east-04.cleardb.com
+      - DB_NAME=heroku_261498ead435f8e
+      - DB_PASSWORD=59d9eff8
+      - DB_PORT=3306
+      - DB_USERNAME=be24a43c8d9c41
+      - JWT_SECRET_KEY=wNzxJX4A3jKhrrjjeSUsNSUPl5vNPV7pGhR4HXF2
+    volumes:
+      - ./:/home/node/app
+    command: bash -c " npm install && npm start"
