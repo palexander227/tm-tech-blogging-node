@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter} from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -20,8 +20,8 @@ axios.interceptors.request.use(
       req.headers['Content-Type'] = 'application/json';
     }
     // Concatenate base path if not an absolute URL
-    if ( !isAbsoluteURLRegex.test(req.url) ) {
-      req.url = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : '' + req.url;
+    if (!isAbsoluteURLRegex.test(req.url)) {
+      req.url = process.env.REACT_APP_API_URL + req.url;
     }
     return req;
   },
@@ -54,3 +54,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+
