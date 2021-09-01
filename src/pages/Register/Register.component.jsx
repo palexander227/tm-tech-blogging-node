@@ -1,13 +1,13 @@
-import React, {Fragment} from 'react';
-import {connect} from 'react-redux';
-import {Redirect} from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {setAlert} from '../../redux/alert/alert.actions';
+import { setAlert } from '../../redux/alert/alert.actions';
 import AuthForm from '../../components/AuthForm/AuthForm.component';
 
 import './Register.styles.scss';
 
-const Register = ({isAuthenticated, isRegistered}) => {
+const Register = ({ isAuthenticated, isRegistered }) => {
   if (isAuthenticated) {
     return <Redirect to='/' />;
   }
@@ -39,4 +39,4 @@ const mapStateToProps = (state) => ({
   isRegistered: state.auth.registered
 });
 
-export default connect(mapStateToProps, {setAlert})(Register);
+export default connect(mapStateToProps, { setAlert })(Register);

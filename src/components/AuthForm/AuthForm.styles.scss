@@ -55,3 +55,9 @@
 .form-control.invalid {
   border: 1px solid #FF0000;
 }
+
+@media(max-width:768px){
+  .form-container  {
+    width: 100%;
+  }
+}

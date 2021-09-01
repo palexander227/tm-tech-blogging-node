@@ -1,0 +1,9 @@
+.style-page{
+    margin-top: 130px;
+}
+
+@media(max-width:768px){
+    .style-page{
+        margin-top: 150px;
+    }
+}

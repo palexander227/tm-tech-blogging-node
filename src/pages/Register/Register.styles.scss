@@ -1,6 +1,5 @@
 .auth-page {
   width: 100%;
-  height: 100vh;
 }
 
 .register-content {
@@ -10,11 +9,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90.7vh;
+  padding-top: 150px;
+  padding-bottom: 50px;
 }
 
 .register-grid  {
   display: flex;
   align-items: center;
   box-sizing: inherit;
+}
+
+@media(max-width:768px){
+  .auth-page {
+    padding: 15px;
+  }
 }

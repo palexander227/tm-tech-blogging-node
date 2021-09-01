@@ -3,19 +3,27 @@
   padding: .75rem 1.25rem;
   border: 1px solid transparent;
   border-radius: .25rem;
-  width: 50%;
+  width: 30%;
   top: 79px;
-  left: 22.5%;
+  left: 50%;
+  transform: translate(-50%, -0);
   z-index: 4;
   font-size: 15px;
 }
 
 .alert-success {
-  background-color: #48a868;
-  color: #2d2d2d;
+  background-color: #7bed9f;
+  color: #fff;
 }
 
 .alert-danger {
   background-color: #c4524f;
-  color: #2d2d2d;
+  color: #fff;
+}
+
+@media(max-width:768px){
+  .alert {
+    top: 120px;
+    width: 90%;
+  }
 }

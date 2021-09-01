@@ -1,5 +1,5 @@
-import React, {Fragment, useEffect, useState} from 'react';
-import {connect} from 'react-redux';
+import React, { Fragment, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getPosts } from '../../redux/posts/posts.actions';
 import { Link } from 'react-router-dom';
@@ -9,7 +9,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import './HomePage.styles.scss';
 import { Redirect } from 'react-router-dom';
 
-const HomePage = ({getPosts, post: {posts, loading, count}, match, auth: {user, isAuthenticated}}) => {
+const HomePage = ({ getPosts, post: { posts, loading, count }, match, auth: { user, isAuthenticated } }) => {
 
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(2);
@@ -30,7 +30,7 @@ const HomePage = ({getPosts, post: {posts, loading, count}, match, auth: {user, 
       setHasMore(false);
       return;
     }
-    setPage(page+1);
+    setPage(page + 1);
     (isUser) ? getPosts(user.id, page) : getPosts(null, page);
   }
   if (isUser && !isAuthenticated && !loading) {
@@ -40,16 +40,17 @@ const HomePage = ({getPosts, post: {posts, loading, count}, match, auth: {user, 
     <Spinner type='page' width='75px' height='200px' />
   ) : (
     <Fragment>
-      <div id='mainbar' className='homepage fc-black-800'>
-        <div className="row float-right">
+      <div className='container-fluid'>
+        <div className="post-create-btn">
           {isUser && <Link className="btn btn-primary" to="add/post">Create New Post</Link>}
         </div>
-        <div className='questions'>
+        <div className='dsafsdf' >
           <InfiniteScroll
             dataLength={posts.length}
             next={fetchMoreData}
             hasMore={hasMore}
             loader={<h4>Loading...</h4>}
+            className='style-post-card'
           >
             {posts.map((post) => (
               <PostItem key={post.id} post={post} />
@@ -74,4 +75,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, {getPosts})(HomePage);
+export default connect(mapStateToProps, { getPosts })(HomePage);

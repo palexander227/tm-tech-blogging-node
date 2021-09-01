@@ -103,7 +103,7 @@
 
 @media(max-width: 1100px) {
   .post {
-    width: 80%;
+    width: 90%;
   }
 }
 
@@ -123,4 +123,35 @@ iframe {
   border: none;         /* Reset default border */
   height: 100%;        /* Viewport-relative units */
   width: 100%;
+}
+
+.view-post{
+  display: flex;
+  justify-content: center;
+}
+
+.profile-image{
+  content: attr(data-letters);
+    display: inline-block;
+    font-size: 1em;
+    width: 2.5em;
+    height: 2.5em;
+    line-height: 2.5em;
+    text-align: center;
+    border-radius: 50%;
+    background: plum;
+    vertical-align: middle;
+    color: white;
+}
+
+.post-imagess{
+  margin: 20px;
+}
+
+.post-imagess img{
+    width: 300px;
+}
+
+.fa-ellipsis-h{
+  cursor: pointer;
 }

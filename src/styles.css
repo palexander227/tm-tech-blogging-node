@@ -51,6 +51,7 @@ a, .s-link {
     cursor: pointer;
     user-select: none;
     background: #FFF;
+    width: 100px;
 }
 
 .s-btn__primary {
@@ -66,4 +67,11 @@ a, .s-link {
 
 body.theme-dark .s-btn__primary, .theme-dark__forced .s-btn__primary {
     box-shadow: none;
+}
+
+@media(max-width:768px){
+    .s-btn {
+        width: 60px;
+        padding: 10px 0;
+    }
 }

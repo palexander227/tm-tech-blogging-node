@@ -1,9 +1,9 @@
-import React, {useEffect, Fragment, useState} from 'react';
+import React, { useEffect, Fragment, useState } from 'react';
 import moment from 'moment';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {getUser, updateUser, deleteUser} from '../../redux/users/users.actions';
-import {Link} from 'react-router-dom';
+import { getUser, updateUser, deleteUser } from '../../redux/users/users.actions';
+import { Link } from 'react-router-dom';
 import {
   Formik,
   Form,
@@ -16,19 +16,19 @@ import PageTitle from '../../components/PageTitle/PageTitle.component';
 import Spinner from '../../components/Spinner/Spinner.component';
 import './UserPage.styles.scss';
 
-const UserPage = ({getUser, updateUser, deleteUser, user: {user, loading}, match}) => {
+const UserPage = ({ getUser, updateUser, deleteUser, user: { user, loading }, match }) => {
   const [isUpdate, setUpdate] = useState(false);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const initialValues = { firstName: user?.firstName, lastName: user?.lastName, username: user?.username};
-  const validationSchema= Yup.object().shape({
-      firstName: Yup.string()
-        .required("First Name is required"),
-      lastName: Yup.string()
-        .required("Last Name is required")
-    
+  const initialValues = { firstName: user?.firstName, lastName: user?.lastName, username: user?.username };
+  const validationSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .required("First Name is required"),
+    lastName: Yup.string()
+      .required("Last Name is required")
+
   })
 
   useEffect(() => {
@@ -41,54 +41,56 @@ const UserPage = ({getUser, updateUser, deleteUser, user: {user, loading}, match
   ) : (
     <Fragment>
       <PageTitle title={`User ${user.username} - CLONE Stack Overflow`} />
-      <div id='mainbar' className='user-main-bar pl24 pt24'>
-        <div className='user-card'>
-          <div className='grid'>
-            <div className='img-card'>
-              <div className='avatar-card'>
-                <div className='avatar'>
-                  <Link className='avatar-link' to={`/users/${user.id}`}>
-                    <div className='logo-wrapper'>
-                      <div className="profile-image-lg">
-                        {user.firstName.charAt(0) + user.lastName.charAt(0)}
+      <div className='kljkljlj'>
+        <div id='mainbar' className='user-main-bar pl24 pt24 col-md-8 col-12'>
+          <div className='user-card'>
+            <div className='grid'>
+              <div className='img-card'>
+                <div className='avatar-card'>
+                  <div className='avatar'>
+                    <Link className='avatar-link' to={`/users/${user.id}`}>
+                      <div className='logo-wrapper'>
+                        <div className="profile-image-lg text-uppercase">
+                          {user.firstName.charAt(0) + user.lastName.charAt(0)}
+                        </div>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className='content-card py-4'>
-              <div className='content-grid'>
-                <div className='info-cell'>
-                  <div className='info'>
-                    <div className='details'>
-                      <h2>{user.username}</h2>
-                    </div>
-                    <div className='date'>
-                      <div>
-                        user created &nbsp;-&nbsp;
-                        {moment(user.createdAt).fromNow(false)}
+              <div className='content-card py-4'>
+                <div className='content-grid'>
+                  <div className='info-cell'>
+                    <div className='info'>
+                      <div className='details'>
+                        <h2>{user.username}</h2>
+                      </div>
+                      <div className='date'>
+                        <div>
+                          User created &nbsp;-&nbsp;
+                          {moment(user.createdAt).fromNow(false)}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className='stats-cell'>
-                  <div className='count-sec'>
-                    <div className='counts'>
-                      <div className='cells'>
-                        <div className='column-grid'>
-                          <div className='head fc-black-700'>
-                            {user.answer_count}
+                  <div className='stats-cell'>
+                    <div className='count-sec'>
+                      <div className='counts'>
+                        <div className='cells'>
+                          <div className='column-grid'>
+                            <div className='head fc-black-700'>
+                              {user.answer_count}
+                            </div>
+                            <button className='btn btn-primary foot fc-black-500' onClick={() => setUpdate(true)} disabled={isUpdate}>Update</button>
                           </div>
-                          <button className='btn btn-primary foot fc-black-500' onClick={()=>setUpdate(true)} disabled={isUpdate}>upodate</button>
                         </div>
-                      </div>
-                      <div className='cells'>
-                        <div className='column-grid'>
-                          <div className='head fc-black-700'>
-                            {user.post_count}
+                        <div className='cells'>
+                          <div className='column-grid'>
+                            <div className='head fc-black-700'>
+                              {user.post_count}
+                            </div>
+                            <button className='btn btn-danger foot fc-black-500' onClick={handleShow}>Delete</button>
                           </div>
-                          <button className='btn btn-danger foot fc-black-500' onClick={handleShow}>delete</button>
                         </div>
                       </div>
                     </div>
@@ -97,87 +99,87 @@ const UserPage = ({getUser, updateUser, deleteUser, user: {user, loading}, match
               </div>
             </div>
           </div>
-        </div>
-        <div className='row-grid'>
-          <div className='grid-cell1'>
-          </div>
-          <div className='grid-cell2'>
-            <div className='top-tags'>
-              <Formik
-                initialValues={initialValues}
-                onSubmit={(values, actions) => {
-                  updateUser(values);
-                  setUpdate(false);
-                  actions.setSubmitting(false);
-                }}
-                validationSchema={validationSchema}
-              >
-              {({ errors, touched }) => (
-                <Form className='login-form'>
-                  <div className='form-group mb-3'>
-                    <label htmlFor='username' className='pb-2 font-weight-bold' >
-                      Username
-                    </label>
-                    <Field
-                      className={'form-control'}
-                      type='text'
-                      name='username'
-                      id='username'
-                      disabled={true}
-                    />
-                  </div>
-                  <div className='form-group mb-3'>
-                  <label htmlFor='firstName' className='pb-2 font-weight-bold'>
-                      Firstname
-                    </label>
-                    <Field
-                      className={'form-control ' + (errors.firstName && touched.firstName ? 'invalid' : '')}
-                      type='text'
-                      name='firstName'
-                      id='firstName'
-                      disabled={!isUpdate}
-                    />
-                    <ErrorMessage name="firstName" className="formik-err-msg" component="div"/>
-                  </div>
-                  <div className='form-group mb-3'>
-                  <label htmlFor='lastName' className='pb-2 font-weight-bold'>
-                      Lastname
-                    </label>
-                    <Field
-                      className={'form-control ' + (errors.lastName && touched.lastName ? 'invalid' : '')}
-                      type='text'
-                      name='lastName'
-                      id='lastName'
-                      disabled={!isUpdate}
-                    />
-                    <ErrorMessage name="lastName" className="formik-err-msg" component="div"/>
-                  </div>
-                  {isUpdate &&
-                    <div className="d-flex">
-                      <div className='grid gs4 gsy fd-column js-auth-item '>
-                        <button
-                          className='btn btn-primary'
-                          id='submit-button'
-                          name='submit-button'
-                          type='submit'
-                        >
-                          Update
-                        </button>
+          <div className='row-grid'>
+            <div className='grid-cell1'>
+            </div>
+            <div className='grid-cell2'>
+              <div className='top-tags'>
+                <Formik
+                  initialValues={initialValues}
+                  onSubmit={(values, actions) => {
+                    updateUser(values);
+                    setUpdate(false);
+                    actions.setSubmitting(false);
+                  }}
+                  validationSchema={validationSchema}
+                >
+                  {({ errors, touched }) => (
+                    <Form className='login-form'>
+                      <div className='form-group mb-3'>
+                        <label htmlFor='username' className='pb-2 font-weight-bold' >
+                          Username
+                        </label>
+                        <Field
+                          className={'form-control'}
+                          type='text'
+                          name='username'
+                          id='username'
+                          disabled={true}
+                        />
                       </div>
-                      <div className='grid gs4 gsy fd-column js-auth-item '>
-                        <button
-                          className='btn btn-danger'
-                          id='cancel-button'
-                          name='cancel-button'
-                        >
-                          Cancel
-                        </button>
+                      <div className='form-group mb-3'>
+                        <label htmlFor='firstName' className='pb-2 font-weight-bold'>
+                          Firstname
+                        </label>
+                        <Field
+                          className={'form-control ' + (errors.firstName && touched.firstName ? 'invalid' : '')}
+                          type='text'
+                          name='firstName'
+                          id='firstName'
+                          disabled={!isUpdate}
+                        />
+                        <ErrorMessage name="firstName" className="formik-err-msg" component="div" />
                       </div>
-                    </div>
-                  }
-                </Form>
-              )}
-              </Formik>
+                      <div className='form-group mb-3'>
+                        <label htmlFor='lastName' className='pb-2 font-weight-bold'>
+                          Lastname
+                        </label>
+                        <Field
+                          className={'form-control ' + (errors.lastName && touched.lastName ? 'invalid' : '')}
+                          type='text'
+                          name='lastName'
+                          id='lastName'
+                          disabled={!isUpdate}
+                        />
+                        <ErrorMessage name="lastName" className="formik-err-msg" component="div" />
+                      </div>
+                      {isUpdate &&
+                        <div className="d-flex">
+                          <div className='grid gs4 gsy fd-column js-auth-item '>
+                            <button
+                              className='btn btn-primary'
+                              id='submit-button'
+                              name='submit-button'
+                              type='submit'
+                            >
+                              Update
+                            </button>
+                          </div>
+                          <div className='grid gs4 gsy fd-column js-auth-item '>
+                            <button
+                              className='btn btn-danger'
+                              id='cancel-button'
+                              name='cancel-button'
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      }
+                    </Form>
+                  )}
+                </Formik>
+              </div>
             </div>
           </div>
         </div>
@@ -188,7 +190,7 @@ const UserPage = ({getUser, updateUser, deleteUser, user: {user, loading}, match
           <Button variant="secondary" onClick={handleClose}>
             No
           </Button>
-          <Button variant="primary" onClick={()=> { deleteUser(); handleClose();}}>
+          <Button variant="primary" onClick={() => { deleteUser(); handleClose(); }}>
             Yes
           </Button>
         </Modal.Footer>
@@ -208,4 +210,4 @@ const mapStateToProps = (state) => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, {getUser, updateUser, deleteUser})(UserPage);
+export default connect(mapStateToProps, { getUser, updateUser, deleteUser })(UserPage);

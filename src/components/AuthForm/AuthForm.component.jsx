@@ -1,9 +1,9 @@
-import React, {Fragment, useState} from 'react';
-import {Link} from 'react-router-dom';
-import {connect} from 'react-redux';
+import React, { Fragment, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {login, register} from '../../redux/auth/auth.actions';
-import {enableSignupLink} from '../../redux/auth/auth.actions';
+import { login, register } from '../../redux/auth/auth.actions';
+import { enableSignupLink } from '../../redux/auth/auth.actions';
 import {
   Formik,
   Form,
@@ -13,14 +13,14 @@ import {
 import * as Yup from 'yup';
 import './AuthForm.styles.scss';
 
-const AuthForm = ({register, login, action, enableSignupLink}) => {
-  let initialValues = { username: '', password: ''};
-  if (action === 'Sign up') initialValues = {...initialValues, firstName: '', lastName: ''};
+const AuthForm = ({ register, login, action, enableSignupLink }) => {
+  let initialValues = { username: '', password: '' };
+  if (action === 'Sign up') initialValues = { ...initialValues, firstName: '', lastName: '' };
   const signUpValidationSchema = {
     firstName: Yup.string()
-                .required("Firstname is required"),
+      .required("Firstname is required"),
     lastName: Yup.string()
-                .required("Lastname is required")
+      .required("Lastname is required")
   }
   const signUpLink = (
     <Fragment>
@@ -34,7 +34,7 @@ const AuthForm = ({register, login, action, enableSignupLink}) => {
   const logInLink = (
     <Fragment>
       Don't have an account?{' '}
-      <Link to='/register' name='register' onClick={()=>enableSignupLink(false)}>
+      <Link to='/register' name='register' onClick={() => enableSignupLink(false)}>
         Sign up
       </Link>
     </Fragment>
@@ -54,7 +54,7 @@ const AuthForm = ({register, login, action, enableSignupLink}) => {
             name='firstName'
             id='firstName'
           />
-          <ErrorMessage name="firstName" className="formik-err-msg" component="div"/>
+          <ErrorMessage name="firstName" className="formik-err-msg" component="div" />
         </div>
         <div className='form-group mb-3'>
           <label htmlFor='lastName' className='pb-2 font-weight-bold' >
@@ -66,7 +66,7 @@ const AuthForm = ({register, login, action, enableSignupLink}) => {
             name='lastName'
             id='lastName'
           />
-          <ErrorMessage name="lastName" className="formik-err-msg" component="div"/>
+          <ErrorMessage name="lastName" className="formik-err-msg" component="div" />
         </div>
       </Fragment>
     )
@@ -89,51 +89,51 @@ const AuthForm = ({register, login, action, enableSignupLink}) => {
             validationSchema={Yup.object().shape({
               ...(action === 'Sign up' && signUpValidationSchema),
               username: Yup.string()
-              .required("Username is required"),
+                .required("Username is required"),
               password: Yup.string()
                 .required("Password is required")
                 .test('password', 'Password is not valid', (val) => /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,15}$/i.test(val))
-              
+
             })}
           >
-          {({ errors, touched }) => (
-            <Form className='login-form'>
-              {action === 'Sign up' && signUpForm(errors, touched)}
-              <div className='form-group mb-3'>
-                <label htmlFor='username' className='pb-2 font-weight-bold' >
-                  Username
-                </label>
-                <Field
-                  className={'form-control ' + (errors.username && touched.username ? 'invalid' : '')}
-                  type='text'
-                  name='username'
-                  id='username'
-                />
-                <ErrorMessage name="username" className="formik-err-msg" component="div"/>
-              </div>
-              <div className='form-group mb-3'>
-              <label htmlFor='password' className='pb-2 font-weight-bold'>
-                  Password
-                </label>
-                <Field
-                  className={'form-control ' + (errors.password && touched.password ? 'invalid' : '')}
-                  type='password'
-                  name='password'
-                  id='password'
-                />
-                <ErrorMessage name="password" className="formik-err-msg" component="div"/>
-              </div>
-              <div className='grid gs4 gsy fd-column js-auth-item '>
-                <button
-                  className='s-btn s-btn__primary'
-                  id='submit-button'
-                  name='submit-button'
-                >
-                  {action}
-                </button>
-              </div>
-            </Form>
-          )}
+            {({ errors, touched }) => (
+              <Form className='login-form'>
+                {action === 'Sign up' && signUpForm(errors, touched)}
+                <div className='form-group mb-3'>
+                  <label htmlFor='username' className='pb-2 font-weight-bold' >
+                    Username
+                  </label>
+                  <Field
+                    className={'form-control ' + (errors.username && touched.username ? 'invalid' : '')}
+                    type='text'
+                    name='username'
+                    id='username'
+                  />
+                  <ErrorMessage name="username" className="formik-err-msg" component="div" />
+                </div>
+                <div className='form-group mb-3'>
+                  <label htmlFor='password' className='pb-2 font-weight-bold'>
+                    Password
+                  </label>
+                  <Field
+                    className={'form-control ' + (errors.password && touched.password ? 'invalid' : '')}
+                    type='password'
+                    name='password'
+                    id='password'
+                  />
+                  <ErrorMessage name="password" className="formik-err-msg" component="div" />
+                </div>
+                <div className='grid gs4 gsy fd-column js-auth-item '>
+                  <button
+                    className='s-btn s-btn__primary'
+                    id='submit-button'
+                    name='submit-button'
+                  >
+                    {action}
+                  </button>
+                </div>
+              </Form>
+            )}
           </Formik>
           <div className='fs-caption license fc-black-500'>
             By clicking “{action}”, you agree to our{' '}
@@ -180,4 +180,4 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, {login, register, enableSignupLink})(AuthForm);
+export default connect(mapStateToProps, { login, register, enableSignupLink })(AuthForm);
