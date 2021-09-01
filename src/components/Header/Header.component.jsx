@@ -7,7 +7,7 @@ import { getPosts } from '../../redux/posts/posts.actions';
 import Spinner from '../Spinner/Spinner.component';
 import LinkButton from '../LinkButton/LinkButton.component';
 import { Dropdown } from 'react-bootstrap';
-import blog from '../../assets/blog.jpg'
+import blog from '../../assets/blog_thoughtmuseum_logo.png'
 
 import './Header.styles.scss';
 import SideBar from '../SideBar/SideBar.component';
@@ -76,7 +76,7 @@ const Header = ({ auth: { isAuthenticated, loading, user }, logout, getPosts }) 
 
 
           <Link className='navbar-brand' to='/'>
-            <img src={blog} alt="" />
+            <img src={blog} alt="" height="100rem"/>
           </Link>
 
           <SideBar />

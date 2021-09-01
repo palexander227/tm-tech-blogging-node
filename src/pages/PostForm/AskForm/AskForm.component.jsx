@@ -28,7 +28,7 @@ const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) =>
     setFieldValue('image', '');
   }
   if (toNext) {
-    return <Redirect to="/" />
+    return <Redirect to="/dashboard" />
   }
 
   return (

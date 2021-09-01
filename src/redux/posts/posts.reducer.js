@@ -6,6 +6,7 @@ import {
   POST_ERROR,
   DELETE_POST,
   ADD_POST,
+  GET_POST_REQ
 } from './posts.types';
 
 const initialState = {
@@ -50,6 +51,11 @@ export default function (state = initialState, action) {
         error: action.payload,
         loading: false,
       };
+    case GET_POST_REQ:
+      return {
+        ...state,
+        loading: true
+      }
     default:
       return state;
   }

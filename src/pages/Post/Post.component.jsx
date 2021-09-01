@@ -72,6 +72,7 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
       setContents(contentToRender);
       let doc = document.getElementById('iframe').contentWindow.document;
       doc.open();
+      doc.write('<link rel="stylesheet" type="text/css" href="/ck.css" />');
       doc.write(contentToRender);
       doc.close();
     }
@@ -153,7 +154,7 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
                 <div className="profile-image mr-3 profile-25">
                   {firstName.charAt(0) + lastName.charAt(0)}
                 </div>
-                <textarea className="form-control col-10" name="content" id="comment-value" rows="2" onChange={handleChange}></textarea>
+                <textarea className="form-control col-10" name="content" id="comment-value" rows="2" onChange={handleChange} value={content}></textarea>
               </div>
               <button className="btn btn-primary" style={{ marginLeft: '55px' }} onClick={handleSubmit}>comment</button>
             </div>

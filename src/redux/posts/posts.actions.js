@@ -8,7 +8,8 @@ import {
   POST_ERROR,
   DELETE_POST,
   ADD_POST,
-  UPDATE_POST
+  UPDATE_POST,
+  GET_POST_REQ
 } from './posts.types';
 
 // Get posts
@@ -35,6 +36,9 @@ export const getPosts = (userId = null, page = 1, search = '') => async (dispatc
 
 // Get post
 export const getPost = (id) => async (dispatch) => {
+  dispatch({
+    type: GET_POST_REQ
+  });
   try {
     const res = await axios.get(`/api/post/${id}`);
 
@@ -83,7 +87,7 @@ export const addPost = (formData) => async (dispatch) => {
 
     dispatch(setAlert(res.data.message, 'success'));
 
-    dispatch(getPosts());
+    //dispatch(getPosts());
   } catch (err) {
     dispatch(setAlert(err.response.data.message, 'danger'));
 
@@ -127,7 +131,7 @@ export const updatePost = (formData, postId) => async (dispatch) => {
 
     dispatch(setAlert(res.data.message, 'success'));
 
-    dispatch(getPosts());
+    //dispatch(getPosts());
   } catch (err) {
     dispatch(setAlert(err.response.data.message, 'danger'));
 
