@@ -8,11 +8,13 @@ const MyStatefulEditor = (props) => {
     <CKEditor
       editor={ ClassicEditor }
       data={props.value}
-      config={{ckfinder: {
-        // Upload the images to the server using the CKFinder QuickUpload command.
-        uploadUrl: '/api/post/file_upload?command=QuickUpload&type=Images&responseType=json',
-        mediaEmbed: {previewsInData: true}
-      }}}
+      config={{
+        ckfinder: {
+          // Upload the images to the server using the CKFinder QuickUpload command.
+          uploadUrl: process.env.REACT_APP_API_URL+'/api/post/file_upload?command=QuickUpload&type=Images&responseType=json',
+          mediaEmbed: {previewsInData: true}
+          }
+      }}
       onReady={ editor => {
         // You can store the "editor" and use when it is needed.
         console.log( 'Editor is ready to use!', editor );

@@ -12,10 +12,10 @@ import {
 } from './posts.types';
 
 // Get posts
-export const getPosts = (userId = null, page = 1) => async (dispatch, getState) => {
+export const getPosts = (userId = null, page = 1, search = '') => async (dispatch, getState) => {
   const state = getState();
   try {
-    const res = await axios.get(`/api/post/allpost?pageNo=${page}&userId=${userId}`);
+    const res = await axios.get(`/api/post/allpost?pageNo=${page}&userId=${userId}&search=${search}`);
     if (page && page !== 1) {
       res.data.posts = state.post.posts.concat(res.data.posts);
     }

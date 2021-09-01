@@ -12,7 +12,7 @@ import blog from '../../assets/blog.jpg'
 import './Header.styles.scss';
 import SideBar from '../SideBar/SideBar.component';
 
-const Header = ({ auth: { isAuthenticated, loading, user }, logout }) => {
+const Header = ({ auth: { isAuthenticated, loading, user }, logout, getPosts }) => {
 
   const [search, setSearch] = useState('');
   let history = useHistory();
@@ -64,6 +64,7 @@ const Header = ({ auth: { isAuthenticated, loading, user }, logout }) => {
 
   const handleChange = (e) => {
     setSearch(e.target.value);
+    if (e.target.value.length > 2) getPosts('', 1, search);
   }
 
   return loading ? (
@@ -105,6 +106,7 @@ const Header = ({ auth: { isAuthenticated, loading, user }, logout }) => {
 
 Header.propTypes = {
   logout: PropTypes.func.isRequired,
+  getPosts: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
 
@@ -112,4 +114,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { logout })(Header);
+export default connect(mapStateToProps, { logout, getPosts })(Header);

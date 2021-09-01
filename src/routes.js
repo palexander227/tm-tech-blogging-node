@@ -10,6 +10,7 @@ import Post from './pages/Post/Post.component';
 import PostForm from './pages/PostForm/PostForm.component';
 import UserPage from './pages/UserPage/UserPage.component';
 import NotFound from './pages/NotFound/NotFound.component';
+import PrivateRoute from './components/PrivateRoute';
 
 const HomePageComponent = withPageTitle({
   component: PageContainer({component: HomePage}),
@@ -47,10 +48,10 @@ const Routes = () => {
       <Route exact path='/register' component={RegisterComponent} />
       <Route exact path='/login' component={LoginComponent} />
       <Route exact path='/post/:id' component={PostComponent} />
-      <Route exact path='/users/:id' component={UserPageComponent} />
-      <Route exact path='/add/post' component={PostFormComponent} />
-      <Route exact path='/add/post/:id' component={PostFormComponent} />
-      <Route exact path='/dashboard' component={HomePageComponent} />
+      <PrivateRoute exact path='/users/:id' component={UserPageComponent} />
+      <PrivateRoute exact path='/add/post' component={PostFormComponent} />
+      <PrivateRoute exact path='/add/post/:id' component={PostFormComponent} />
+      <PrivateRoute exact path='/dashboard' component={HomePageComponent} />
       <Route path='*' component={NotFoundComponent} />
     </Switch>
   );

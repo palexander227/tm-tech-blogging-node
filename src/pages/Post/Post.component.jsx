@@ -9,14 +9,13 @@ import Spinner from '../../components/Spinner/Spinner.component';
 import { Dropdown } from 'react-bootstrap';
 import './Post.styles.scss';
 
-const Post = ({ getPost, post, comments, match, getComments, addComment, deleteComment, deletePost, auth: { user } }) => {
+const Post = ({ getPost, post, comments, match, getComments, addComment, deleteComment, deletePost, auth: { user, isAuthenticated } }) => {
   const { loading, post: postData } = post;
   const [content, setContent] = useState('');
   const [contents, setContents] = useState('');
   const ref = React.useRef();
   const [height, setHeight] = React.useState("0px");
   const onLoad = () => {
-    console.log(ref.current.style)
     ref.current.style.height = ref.current.contentWindow.document.body.scrollHeight + "px";
     setHeight(ref.current.contentWindow.document.body.scrollHeight + "px");
   };
@@ -32,6 +31,7 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
     getComments(match.params.id);
     // eslint-disable-next-line
   }, [getPost]);
+
 
   useEffect(() => {
     if (postData && postData.content) {
@@ -57,9 +57,10 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
         //Create a iframe tag
         const newIframe = document.createElement("iframe");
         newIframe.setAttribute("width", "100%");
-        newIframe.setAttribute("height", "auto");
+        newIframe.setAttribute("height", "400px");
         newIframe.setAttribute("allowFullScreen", "");
         newIframe.setAttribute("frameBorder", 0);
+        newIframe.setAttribute("class", "video-embed")
         if (url) {
           newIframe.setAttribute("src", url);
         }
@@ -70,7 +71,6 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
       const contentToRender = parentEmbed.outerHTML;
       setContents(contentToRender);
       let doc = document.getElementById('iframe').contentWindow.document;
-      console.log(contentToRender)
       doc.open();
       doc.write(contentToRender);
       doc.close();
@@ -128,7 +128,7 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
           </div>
 
           <div className='row mx-0 mb-3'>
-            <div className="title mb-3 font-weight-bold">{postData.title}</div>
+            <div className="title mb-3 ml-2 font-weight-bold">{postData.title}</div>
             <div className="content col-12">
               <iframe ref={ref}
                 onLoad={onLoad}
@@ -147,7 +147,7 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
           <div className='row mx-0 mb-3'>
             <div className="col-12"><i className="fa fa-comment"></i></div>
           </div>
-          <div className="comments-section">
+          {isAuthenticated && <div className="comments-section">
             <div className="comment-enter mb-3">
               <div className="row mx-0 mb-4">
                 <div className="profile-image mr-3 profile-25">
@@ -176,13 +176,13 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
                     </Dropdown>
                     }
                   </div>
-                  <div className="comment-content pl-4">
+                  <div className="comment-content ml-2 mt-3">
                     {content}
                   </div>
                 </div>
               )
             })}
-          </div>
+          </div>}
         </div>
       </div>
     </Fragment>

@@ -41,14 +41,14 @@ const HomePage = ({ getPosts, post: { posts, loading, count }, match, auth: { us
   ) : (
     <Fragment>
       <div className='container-fluid'>
-        <div className="post-create-btn">
+        <div className="post-create-btn mr-5">
           {isUser && <Link className="btn btn-primary" to="add/post">Create New Post</Link>}
         </div>
         <div className='dsafsdf' >
           <InfiniteScroll
             dataLength={posts.length}
             next={fetchMoreData}
-            hasMore={hasMore}
+            hasMore={loading && hasMore}
             loader={<h4>Loading...</h4>}
             className='style-post-card'
           >
