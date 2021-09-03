@@ -123,7 +123,7 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item href={`/add/post/${match.params.id}`}>Edit</Dropdown.Item>
-                <Dropdown.Item onClick={() => deletePost(match.params.id)} href={`/`}>Delete</Dropdown.Item>
+                <Dropdown.Item onClick={() => deletePost(match.params.id)} href={`/dashboard`}>Delete</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>}
           </div>
