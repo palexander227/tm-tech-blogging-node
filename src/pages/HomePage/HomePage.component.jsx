@@ -8,6 +8,7 @@ import Spinner from '../../components/Spinner/Spinner.component';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import './HomePage.styles.scss';
 import { Redirect } from 'react-router-dom';
+import { post } from 'jquery';
 
 const HomePage = ({ getPosts, updateInitialState, post: { posts, loading, count }, match, auth: { user, isAuthenticated } }) => {
 
@@ -30,6 +31,11 @@ const HomePage = ({ getPosts, updateInitialState, post: { posts, loading, count 
       getPosts();
     }
   }, [getPosts, user, match.url]);
+
+  useEffect(() => {
+    if (!posts.length) setHasMore(false);
+    else setHasMore(true);
+  }, [posts]);
 
   const fetchMoreData = () => {
     if (posts.length >= count) {
@@ -54,7 +60,7 @@ const HomePage = ({ getPosts, updateInitialState, post: { posts, loading, count 
           <InfiniteScroll
             dataLength={posts.length}
             next={fetchMoreData}
-            hasMore={loading && hasMore}
+            hasMore={hasMore}
             loader={<h4>Loading...</h4>}
             className='style-post-card'
           >

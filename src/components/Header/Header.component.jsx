@@ -40,7 +40,7 @@ const Header = ({ auth: { isAuthenticated, loading, user }, logout, getPosts }) 
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">
+            <Dropdown.Item href="javascript:void(0)">
               <div data-letters={(user.firstName.charAt(0) + user.lastName.charAt(0)).toUpperCase()}>
                 {user.username}
               </div>
@@ -64,7 +64,7 @@ const Header = ({ auth: { isAuthenticated, loading, user }, logout, getPosts }) 
 
   const handleChange = (e) => {
     setSearch(e.target.value);
-    if (e.target.value.length > 2) getPosts('', 1, search);
+    getPosts('', 1, e.target.value);
   }
 
   return loading ? (
