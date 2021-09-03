@@ -8,8 +8,11 @@ import {
   POST_ERROR,
   DELETE_POST,
   ADD_POST,
+  ADD_POST_REQ,
   UPDATE_POST,
-  GET_POST_REQ
+  UPDATE_POST_REQ,
+  GET_POST_REQ,
+  INITIAL_STATE
 } from './posts.types';
 
 // Get posts
@@ -77,7 +80,9 @@ export const getTagPosts = (tagName) => async (dispatch) => {
 
 // Add post
 export const addPost = (formData) => async (dispatch) => {
-
+  dispatch({
+    type: ADD_POST_REQ
+  })
   try {
     const res = await axios.post('/api/post', formData);
     dispatch({
@@ -121,7 +126,9 @@ export const deletePost = (id) => async (dispatch) => {
 
 // Update post
 export const updatePost = (formData, postId) => async (dispatch) => {
-
+  dispatch({
+    type: UPDATE_POST_REQ
+  })
   try {
     const res = await axios.put(`/api/post/${postId}`, formData);
     dispatch({
@@ -141,3 +148,10 @@ export const updatePost = (formData, postId) => async (dispatch) => {
     });
   }
 };
+
+// Post Fetching
+export const updateInitialState = () => async (dispatch) => {
+  dispatch({
+    type: INITIAL_STATE,
+  });
+}

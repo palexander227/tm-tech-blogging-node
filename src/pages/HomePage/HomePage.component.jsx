@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getPosts } from '../../redux/posts/posts.actions';
+import { getPosts, updateInitialState } from '../../redux/posts/posts.actions';
 import { Link } from 'react-router-dom';
 import PostItem from '../../components/PostItem/PostItem.component';
 import Spinner from '../../components/Spinner/Spinner.component';
@@ -9,11 +9,17 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import './HomePage.styles.scss';
 import { Redirect } from 'react-router-dom';
 
-const HomePage = ({ getPosts, post: { posts, loading, count }, match, auth: { user, isAuthenticated } }) => {
+const HomePage = ({ getPosts, updateInitialState, post: { posts, loading, count }, match, auth: { user, isAuthenticated } }) => {
 
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(2);
   const [isUser, setUser] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      updateInitialState();
+    }
+  }, [])
 
   useEffect(() => {
     if (match.url === '/dashboard') {
@@ -67,6 +73,7 @@ const HomePage = ({ getPosts, post: { posts, loading, count }, match, auth: { us
 
 HomePage.propTypes = {
   getPosts: PropTypes.func.isRequired,
+  updateInitialState: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
 };
 
@@ -75,4 +82,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getPosts })(HomePage);
+export default connect(mapStateToProps, { getPosts, updateInitialState })(HomePage);

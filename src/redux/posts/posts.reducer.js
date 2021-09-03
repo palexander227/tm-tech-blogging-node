@@ -6,7 +6,11 @@ import {
   POST_ERROR,
   DELETE_POST,
   ADD_POST,
-  GET_POST_REQ
+  GET_POST_REQ,
+  INITIAL_STATE,
+  UPDATE_POST,
+  ADD_POST_REQ,
+  UPDATE_POST_REQ
 } from './posts.types';
 
 const initialState = {
@@ -36,9 +40,18 @@ export default function (state = initialState, action) {
     case ADD_POST:
       return {
         ...state,
-        //posts: [action.payload, ...state.posts],
+        posts: [action.payload, ...state.posts],
         loading: false,
       };
+      case UPDATE_POST:
+        let posts = state.posts.map(post=>
+          action.payload.id === post.id ? action.payload : post
+        )
+        return {
+          ...state,
+          posts: posts,
+          loading: false,
+        };
     case DELETE_POST:
       return {
         ...state,
@@ -52,9 +65,15 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case GET_POST_REQ:
+    case ADD_POST_REQ:
+    case UPDATE_POST_REQ:
       return {
         ...state,
         loading: true
+      }
+    case INITIAL_STATE:
+      return {
+        ...initialState
       }
     default:
       return state;

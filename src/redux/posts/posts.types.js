@@ -7,3 +7,6 @@ export const DELETE_POST = 'DELETE_POST';
 export const ADD_POST = 'ADD_POST';
 export const UPDATE_POST = 'UPDATE_POST';
 export const GET_POST_REQ = 'GET_POST_REQ';
+export const INITIAL_STATE = 'INITIAL_STATE';
+export const ADD_POST_REQ = 'ADD_POST_REQ';
+export const UPDATE_POST_REQ = 'UPDATE_POST_REQ';

@@ -129,7 +129,10 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
           </div>
 
           <div className='row mx-0 mb-3'>
-            <div className="title mb-3 ml-2 font-weight-bold">{postData.title}</div>
+            <div className="title mb-3 ml-2 font-weight-bold col-12">{postData.title}</div>
+            <div className="post-image mb-3 ml-2 card">
+              <img src={postData.image}  alt="" height="200px" className="card-img-top" />
+            </div>
             <div className="content col-12">
               <iframe ref={ref}
                 onLoad={onLoad}
