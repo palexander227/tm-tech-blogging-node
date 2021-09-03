@@ -42,7 +42,7 @@ const HomePage = ({ getPosts, updateInitialState, post: { posts, loading, count 
       setHasMore(false);
       return;
     }
-    setPage(page + 1);
+    setPage(posts.length%20 + 1);
     (isUser) ? getPosts(user.id, page) : getPosts(null, page);
   }
   if (isUser && !isAuthenticated && !loading) {

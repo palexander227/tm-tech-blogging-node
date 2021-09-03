@@ -164,7 +164,7 @@ const Post = ({ getPost, post, comments, match, getComments, addComment, deleteC
             {comments.map(comment => {
               const { user: { firstName, lastName }, createdAt, content, id } = comment
               return (
-                <div className="comment-container mb-4">
+                <div className="comment-container mb-4" key={id}>
                   <div className="row mx-0">
                     <div className="profile-image">
                       {firstName.charAt(0) + lastName.charAt(0)}

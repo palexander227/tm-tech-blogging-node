@@ -12,7 +12,8 @@ import {
   UPDATE_POST,
   UPDATE_POST_REQ,
   GET_POST_REQ,
-  INITIAL_STATE
+  INITIAL_STATE,
+  REMOVE_UPDATED
 } from './posts.types';
 
 // Get posts
@@ -137,7 +138,7 @@ export const updatePost = (formData, postId) => async (dispatch) => {
     });
 
     dispatch(setAlert(res.data.message, 'success'));
-
+    setTimeout(() => dispatch({type: REMOVE_UPDATED}), 5000);
     //dispatch(getPosts());
   } catch (err) {
     dispatch(setAlert(err.response.data.message, 'danger'));

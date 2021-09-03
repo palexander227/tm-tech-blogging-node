@@ -10,7 +10,8 @@ import {
   INITIAL_STATE,
   UPDATE_POST,
   ADD_POST_REQ,
-  UPDATE_POST_REQ
+  UPDATE_POST_REQ,
+  REMOVE_UPDATED
 } from './posts.types';
 
 const initialState = {
@@ -43,15 +44,21 @@ export default function (state = initialState, action) {
         posts: [action.payload, ...state.posts],
         loading: false,
       };
-      case UPDATE_POST:
-        let posts = state.posts.map(post=>
-          action.payload.id === post.id ? action.payload : post
-        )
-        return {
-          ...state,
-          posts: posts,
-          loading: false,
-        };
+    case UPDATE_POST:
+      let posts = state.posts.map(post=>
+        action.payload.id === post.id ? action.payload : post
+      )
+      return {
+        ...state,
+        posts: posts,
+        loading: false,
+        updated: true
+      };
+    case REMOVE_UPDATED:
+      return {
+        ...state,
+        updated: false
+      }
     case DELETE_POST:
       return {
         ...state,

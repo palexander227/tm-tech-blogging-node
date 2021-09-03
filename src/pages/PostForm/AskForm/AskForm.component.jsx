@@ -13,7 +13,7 @@ import * as Yup from 'yup';
 import './AskForm.styles.scss';
 import {Redirect} from 'react-router-dom';
 
-const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) => {
+const AskForm = ({auth: { user }, addPost, updatePost, post: {post, updated, loading}, postId}) => {
   const [toNext, setToNext] = useState(false)
   const initialValues = { title: post?.title, content: post?.content, image: post?.image};
   const validationSchema = Yup.object().shape({
@@ -27,6 +27,10 @@ const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) =>
   const removeImg = (setFieldValue) => {
     setFieldValue('image', '');
   }
+  useEffect(()=>{
+    if (updated) setToNext(true);
+  },[updated])
+
   if (toNext) {
     return <Redirect to="/dashboard" />
   }
@@ -43,7 +47,6 @@ const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) =>
           formData.append('postImage', values.postImage);
           (postId) ? updatePost(formData, postId) : addPost(formData);
           actions.setSubmitting(false);
-          setToNext(true);
         }}
         validationSchema={validationSchema}
       >
@@ -82,7 +85,7 @@ const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) =>
                 />}
                 {values.image && 
                   <div class="img-wrap">
-                    <span class="close" onClick={()=>removeImg(setFieldValue)}>&times;</span>
+                    <span className="close" onClick={()=>removeImg(setFieldValue)}>&times;</span>
                     <img src={values.image} alt="" />
                 </div>
                 }
@@ -120,6 +123,7 @@ const AskForm = ({auth: { user }, addPost, updatePost, post: {post}, postId}) =>
               name='submit-button'
               type='submit'
             >
+              {loading && <div class="fa fa-spinner fa-spin mr-2"></div>}
               Post
             </button>
           </div>

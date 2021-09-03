@@ -38,7 +38,7 @@ export const addComment = (formData) => async (dispatch) => {
       payload: res.data.comment,
     });
 
-    dispatch(setAlert(res.data.message, 'success'));
+    //dispatch(setAlert(res.data.message, 'success'));
 
     dispatch(getComments(formData.postId));
   } catch (err) {
